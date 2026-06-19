@@ -29,8 +29,8 @@ exports.createTrip = async (req,res) => {
         status
     });  
     await newTrip.save();
-    await Vehicle.findByIdAndUpdate(vehicle,{status:'On Trip'})
-    await Driver.findByIdAndUpdate(driver,{status:'on trip'})
+    //await Vehicle.findByIdAndUpdate(vehicle,{status:'On Trip'})
+    //await Driver.findByIdAndUpdate(driver,{status:'on trip'})
     res.status(201).json(newTrip);
 
 
@@ -94,6 +94,11 @@ exports.updateTrip = async (req,res)=>{
     //this updates the status of drivers and Vehicle automatically if the trip is cancelled or completed to available 
      const trip = await Trip.findById(id)
      if(!trip) return res.status(404).json({message: "trip not found"})
+     if(status === "In Progress") {
+        await Vehicle.findByIdAndUpdate(trip.vehicle,{status: 'On Trip'})
+        await Driver.findByIdAndUpdate(trip.driver,{status : 'on trip'})    
+        
+     }  
      if(status === 'Completed' || status === 'Cancelled')
         {
         await Vehicle.findByIdAndUpdate(trip.vehicle, {status: 'Active'})

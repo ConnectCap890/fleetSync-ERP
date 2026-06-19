@@ -11,4 +11,4 @@ router.put('/:id',authMiddleware,rolesMiddleware(['Admin','Manager','Driver']),t
 router.delete('/:id',authMiddleware,rolesMiddleware(['Admin']),tripController.deleteTrip)
 
 
-moudule.exports = router;
+module.exports = router;
