@@ -87,7 +87,7 @@ exports.updateTrip = async (req,res)=>{
      }) 
      //check if the userType is Driver then only status can be updated
      if( req.user.userType=== 'Driver'){
-     if (object.keys(update).some(key => key !=='status')) {
+     if (Object.keys(update).some(key => key !=='status')) {
         return res.status(403).json({message:"Driver can only update the status"})
      }
     }

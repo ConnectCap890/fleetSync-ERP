@@ -7,9 +7,11 @@ const driverRoutes = require('./Routes/driverRoutes');
 const vehicleRoutes = require('./Routes/vehicleRoutes');
 const journeyRoutes = require('./Routes/journeyRoutes');
 const tripRoutes = require('./Routes/tripRoute')
+const cors = require('cors')
 
 // Middleware
 app.use(express.json());
+app.use(cors());
 
 // Routes
 app.use('/api/journeys', journeyRoutes);
