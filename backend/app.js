@@ -20,7 +20,7 @@ app.use('/api/users', userRoutes);
 app.use('/api/drivers', driverRoutes);
 app.use('/api/auth', authRoutes);
 app.use('/api/managers', managerRoutes);
-app.use('/api/trip',tripRoutes);
+app.use('/api/trips',tripRoutes);
 app.get('/', (req, res) => {
   res.send('Welcome to FleetSync ERP API');
 });

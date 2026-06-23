@@ -41,7 +41,7 @@ const Login = () =>{
     }
 
 return(
-    <div>
+    <div className="bg-blue-500  p-4">
         <h2>FleetSync Login</h2>
         <label>UniqueId</label>
         <input 
@@ -52,7 +52,7 @@ return(
         onChange={handleChange}
 
         />
-        <label>password</label>
+        <label>Password</label>
         <input
         type='password'
         name='password'

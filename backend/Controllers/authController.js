@@ -22,7 +22,7 @@ exports.register = async (req, res) =>{
         });
         await newUser.save();
         res.status(201).json({message: 'User registered successfully',
-                              uniqueId: newUser._id    
+                              uniqueId: newUser.uniqueId   
         });
 
     }catch(error){
