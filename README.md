@@ -170,5 +170,5 @@ npm start
 - Advanced reporting and analytics
 
 ## Author
-Hassan — BBIT Graduate, Virtual University of Pakistan
+Hassan — BBIT (Final Year), Virtual University of Pakistan
 GitHub: github.com/ConnectCap890
