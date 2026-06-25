@@ -1,8 +1,8 @@
 import { useState,useEffect } from "react"
 import API from "../../api/axios"
-import { useNavigate } from "react-router-dom"
-import {useAuth} from "../../context/AuthContext"
-import { Link } from "react-router-dom"
+//import { useNavigate } from "react-router-dom"
+//import {useAuth} from "../../context/AuthContext"
+//import { Link } from "react-router-dom"
 import AdminLayout from "./AdminLayout"
 
 
@@ -23,9 +23,11 @@ const AdminDashboard = () => {
           API.get('/drivers'),
           API.get('/managers')
         ])
+        //console.log('vehicles:', vehicles.data)
 
         setStats({
           totalVehicles: vehicles.data.length,
+          vehiclesAvailable: vehicles.data.filter(v => v.status === 'Active').length,
           activeTrips: trips.data.filter(t => t.status === 'In Progress').length,
           availableDrivers: drivers.data.filter(d => d.status === 'available').length,
           totalManagers: managers.data.length
@@ -62,22 +64,28 @@ const AdminDashboard = () => {
         <div className="grid grid-cols-4 gap-6">
           <div className="bg-white p-6 rounded-lg shadow">
             <h3 className="text-gray-500 text-sm">Total Vehicles</h3>
-            <p className="text-3xl font-bold text-gray-800">{stats.totalVehicles}<h1>🚛</h1></p>
+            <p className="text-3xl font-bold text-gray-800">{stats.totalVehicles}<span>🚛</span></p>
+            
+          </div>
+
+          <div className="bg-white p-6 rounded-lg shadow">
+            <h3 className="text-gray-500 text-sm">Available Vehicles</h3>
+            <p className="text-3xl font-bold text-gray-800">{stats.vehiclesAvailable}<span>🚛</span></p>
             
           </div>
           <div className="bg-white p-6 rounded-lg shadow">
             <h3 className="text-gray-500 text-sm">Active Trips</h3>
-            <p className="text-3xl font-bold text-gray-800">{stats.activeTrips} <h1>🗺️</h1></p>
+            <p className="text-3xl font-bold text-gray-800">{stats.activeTrips} <span>🗺️</span></p>
             
           </div>
           <div className="bg-white p-6 rounded-lg shadow">
             <h3 className="text-gray-500 text-sm">Available Drivers</h3>
-            <p className="text-3xl font-bold text-gray-800">{stats.availableDrivers}<h1>🚘</h1></p>
+            <p className="text-3xl font-bold text-gray-800">{stats.availableDrivers}<span>🚘</span></p>
             
           </div>
           <div className="bg-white p-6 rounded-lg shadow">
             <h3 className="text-gray-500 text-sm">Total Managers</h3>
-            <p className="text-3xl font-bold text-gray-800">{stats.totalManagers}<h1>👥</h1></p>
+            <p className="text-3xl font-bold text-gray-800">{stats.totalManagers}<span>👥</span></p>
             
           </div>
         </div>
