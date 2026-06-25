@@ -3,6 +3,8 @@ import ProtectedRoute from '../components/ProtectedRoute'
 import AdminDashboard from '../pages/admin/Dashboard'
 import Managers from '../pages/admin/Managers'
 import Drivers from '../pages/admin/Driver'
+import Vehicles from '../pages/admin/vehicles'
+import Journey from '../pages/admin/Journey'
 
 const AdminRoutes = [
   
@@ -23,6 +25,20 @@ const AdminRoutes = [
           <Drivers />
           
         </ProtectedRoute>
+      } />,
+      <Route key = 'admin-vehicles' path='/admin/vehicles' element={
+        <ProtectedRoute allowedRoles={['Admin']}>
+          <Vehicles />
+          
+        </ProtectedRoute>
+        
+      } />,
+      <Route key = 'admin-journeys' path='/admin/journeys' element={
+        <ProtectedRoute allowedRoles={['Admin']}>
+          <Journey />
+          
+        </ProtectedRoute>
+        
       } />
       
       
