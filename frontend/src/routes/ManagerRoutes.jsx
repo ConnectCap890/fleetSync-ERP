@@ -1,7 +1,8 @@
 import { Route } from 'react-router-dom'
 import ProtectedRoute from '../components/ProtectedRoute'
-import AdminDashboard from '../pages/manager/Dashboard'
 import ManagerDashboard from '../pages/manager/Dashboard'
+import  Vehicles from '../pages/manager/Vehicles'
+
 
 const ManagerRoutes =  [
   
@@ -9,6 +10,12 @@ const ManagerRoutes =  [
       <Route key='manager-dashboard' path='/manager/dashboard' element={
         <ProtectedRoute allowedRoles={['Manager']}>
           <ManagerDashboard />
+        </ProtectedRoute>
+      } />,
+
+      <Route key='manager-vehicles' path='/manager/Vehicles' element={
+        <ProtectedRoute allowedRoles={['Manager']}>
+          <Vehicles />
         </ProtectedRoute>
       } />
      

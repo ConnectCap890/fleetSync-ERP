@@ -9,28 +9,40 @@ exports.createTrip = async (req,res) => {
     const {journey,vehicle,driver,schedule,status} = req.body;
     try{
     
+        // checks if the vehicle is available
     const vehicleAvalailbility = await Vehicle.findById(vehicle)
-    const driverAvailability = await Driver.findById(driver)
-    // checks if the vehicle is available
-    if (!vehicleAvalailbility) return res.status(404).json({message:"vehicle not found"})
-    if (vehicleAvalailbility.status !== 'Active')
-        return res.status(400).json({message:"vehicle not available"}) 
-
+      if (!vehicleAvalailbility) return res.status(404).json({message:"vehicle not found"})
+       const existingVehicleTrip = await Trip.findOne({
+        vehicle: vehicle,
+        status: {$in: ['Scheduled','In Progress']}
+    }) 
+    if (existingVehicleTrip){
+        return res.status(400).json({message:'Vehicle already Scheduled for another Trip!'})
+    }
     //checks if the driver is available
+    const driverAvailability = await Driver.findById(driver)
+    
     if (!driverAvailability)  return res.status(404).json({message: "driver not found"})
-    if (driverAvailability.status !== 'available')  
-        return res.status(400).json({message: "driver not available"})   
+    const existDriverTrip = await Trip.findOne({
+     driver: driver,
+     status: {$in :['Scheduled','In Progress']}
+    }) 
+    
+    if (existDriverTrip) 
+        return res.status(400).json({message:'Driver is already Scheduled for another Trip!'})
+
     const newTrip =  new Trip({
 
         journey,
         vehicle,
         driver,
         schedule,
-        status
+        status,
+        createdBy: req.user.userId
     });  
     await newTrip.save();
-    //await Vehicle.findByIdAndUpdate(vehicle,{status:'On Trip'})
-    //await Driver.findByIdAndUpdate(driver,{status:'on trip'})
+    await Vehicle.findByIdAndUpdate(vehicle,{status:'On Trip'})
+    await Driver.findByIdAndUpdate(driver,{status:'on trip'})
     res.status(201).json(newTrip);
 
 
@@ -47,7 +59,8 @@ exports.getTripById = async (req,res) => {
         const trip = await Trip.findById(id)
         .populate('journey','to from')
         .populate('vehicle','make model licensePlate')
-        .populate('driver','name');
+        .populate('driver','name')
+        .populate('createdBy', 'email userType');
     if(!trip)
         return res.status(404).json({message: "No Trip found"})
        
@@ -61,9 +74,16 @@ exports.getTripById = async (req,res) => {
 
 exports.getTrip = async (req, res) => {
     try {
+        let query = {}
+
+        if(req.user.userType === 'Manager'){
+            query.createdBy = req.user.userId
+        }
         const trip = await Trip.find()
         .populate('journey','to from')
-        .populate('vehicle','licensePlate');
+        .populate('vehicle','licensePlate')
+        .populate('driver','name')
+        .populate('createdBy','email userType');
        
 
         res.status(200).json(trip);

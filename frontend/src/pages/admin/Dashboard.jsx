@@ -64,13 +64,13 @@ const AdminDashboard = () => {
         <div className="grid grid-cols-4 gap-6">
           <div className="bg-white p-6 rounded-lg shadow">
             <h3 className="text-gray-500 text-sm">Total Vehicles</h3>
-            <p className="text-3xl font-bold text-gray-800">{stats.totalVehicles}<span>🚛</span></p>
+            <p className="text-3xl font-bold text-gray-800">{stats.totalVehicles} <span>🚛</span></p>
             
           </div>
 
           <div className="bg-white p-6 rounded-lg shadow">
             <h3 className="text-gray-500 text-sm">Available Vehicles</h3>
-            <p className="text-3xl font-bold text-gray-800">{stats.vehiclesAvailable}<span>🚛</span></p>
+            <p className="text-3xl font-bold text-gray-800">{stats.vehiclesAvailable} <span>🚛</span></p>
             
           </div>
           <div className="bg-white p-6 rounded-lg shadow">
@@ -80,12 +80,12 @@ const AdminDashboard = () => {
           </div>
           <div className="bg-white p-6 rounded-lg shadow">
             <h3 className="text-gray-500 text-sm">Available Drivers</h3>
-            <p className="text-3xl font-bold text-gray-800">{stats.availableDrivers}<span>🚘</span></p>
+            <p className="text-3xl font-bold text-gray-800">{stats.availableDrivers} <span>🚘</span></p>
             
           </div>
           <div className="bg-white p-6 rounded-lg shadow">
             <h3 className="text-gray-500 text-sm">Total Managers</h3>
-            <p className="text-3xl font-bold text-gray-800">{stats.totalManagers}<span>👥</span></p>
+            <p className="text-3xl font-bold text-gray-800">{stats.totalManagers} <span>👥</span></p>
             
           </div>
         </div>
