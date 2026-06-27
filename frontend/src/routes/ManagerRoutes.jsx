@@ -2,7 +2,9 @@ import { Route } from 'react-router-dom'
 import ProtectedRoute from '../components/ProtectedRoute'
 import ManagerDashboard from '../pages/manager/Dashboard'
 import  Vehicles from '../pages/manager/Vehicles'
-
+import Drivers from '../pages/manager/Drivers'
+import Journey from '../pages/manager/Journey'
+import Trips from '../pages/manager/Trips'
 
 const ManagerRoutes =  [
   
@@ -16,6 +18,21 @@ const ManagerRoutes =  [
       <Route key='manager-vehicles' path='/manager/Vehicles' element={
         <ProtectedRoute allowedRoles={['Manager']}>
           <Vehicles />
+        </ProtectedRoute>
+      } />,
+      <Route key='manager-drivers' path='/manager/Drivers' element={
+        <ProtectedRoute allowedRoles={['Manager']}>
+          <Drivers />
+        </ProtectedRoute>
+      } />,
+       <Route key='manager-journey' path='/manager/journeys' element={
+        <ProtectedRoute allowedRoles={['Manager']}>
+          <Journey />
+        </ProtectedRoute>
+      } />,
+      <Route key='manager-trips' path='/manager/trips' element={
+        <ProtectedRoute allowedRoles={['Manager']}>
+          <Trips />
         </ProtectedRoute>
       } />
      
