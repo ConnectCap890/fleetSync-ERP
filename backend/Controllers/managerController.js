@@ -71,6 +71,19 @@ exports.updateManager = async (req, res) => {
     }
 }
 
+exports.getProfile = async (req,res) =>{
+
+    try{
+        const manager = await Manager.findOne({userID: req.user.userId}).populate('userID', 'email uniqueId')
+        if(!manager) return res.status(404).json({message:'Profile not found'})
+        res.status(200).json(manager)
+
+    }catch(error){
+        res.status(500).json({message: error.message})
+    }
+
+}
+
 exports.deleteManager = async (req, res) => {
     const {id} = req.params;
     try{  

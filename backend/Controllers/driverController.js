@@ -70,6 +70,20 @@ exports.updateDriver = async (req, res) => {
     }
 }
 
+exports.getProfile = async (req,res) =>{
+
+    try{
+        const driver = await Driver.findOne({userID: req.user.userId}).populate('userID', 'email uniqueId')
+        console.log(driver)
+        if(!driver) return res.status(404).json({message:'Profile not found'})
+        res.status(200).json(driver)
+
+    }catch(error){
+        res.status(500).json({message: error.message})
+    }
+
+}
+
 exports.deleteDriver = async (req, res) => {
     const {id} = req.params;    
     try{

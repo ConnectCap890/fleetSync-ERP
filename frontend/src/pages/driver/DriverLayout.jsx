@@ -2,8 +2,7 @@ import { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { useAuth } from '../../context/AuthContext'
 
-
-const AdminLayout = ({ children }) => {
+const DriverLayout = ({ children }) => {
     const { logout } = useAuth()
     const navigate = useNavigate()
     const [collapsed, setCollapsed] = useState(false)
@@ -14,26 +13,22 @@ const AdminLayout = ({ children }) => {
     }
 
     const navItems = [
-        { to: '/admin/dashboard', label: 'Dashboard', icon: '📊' },
-        { to: '/admin/users', label: 'Users', icon: 'U' },
-        { to: '/admin/managers', label: 'Managers', icon: '👥' },
-        { to: '/admin/drivers', label: 'Drivers', icon: '🚘' },
-        { to: '/admin/vehicles', label: 'Vehicles', icon: '🚛' },
-        { to: '/admin/journeys', label: 'Journeys', icon: '🗺️' },
-        { to: '/admin/trips', label: 'Trips', icon: '📋' },
+        { to: '/driver/dashboard', label: 'Dashboard', icon: '📊' },
+        { to: '/drivers/trips', label: 'Trips', icon: '📋' },
+        { to: '/drivers/profile', label: 'My Profile', icon: '👤' }
     ]
 
     return (
         <div className="flex h-screen bg-gray-100">
             {/* Sidebar */}
-            <div className={`${collapsed ? 'w-16' : 'w-64'} bg-gray-800 text-white flex flex-col transition-all duration-300`}>
+            <div className={`${collapsed ? 'w-16' : 'w-64'} bg-green-400 text-white flex flex-col transition-all duration-300`}>
                 
                 {/* Header */}
                 <div className="p-4 flex items-center justify-between">
                     {!collapsed && (
                         <div>
                             <h1 className="text-xl font-bold">FleetSync</h1>
-                            <p className="text-gray-400 text-xs">Admin Panel</p>
+                            <p className="text-gray-400 text-xs">Driver's Panel</p>
                         </div>
                     )}
                     <button 
@@ -78,4 +73,4 @@ const AdminLayout = ({ children }) => {
     )
 }
 
-export default AdminLayout
+export default DriverLayout

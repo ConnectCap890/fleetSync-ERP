@@ -1,7 +1,7 @@
 const {randomBytes} = require('crypto');
 
 function generateUniqueId() {
-  return randomBytes(16).toString('hex');
+  return randomBytes(3).toString('hex');
 }
 
 module.exports = generateUniqueId;

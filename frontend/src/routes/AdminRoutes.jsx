@@ -1,6 +1,7 @@
 import { Route } from 'react-router-dom'
 import ProtectedRoute from '../components/ProtectedRoute'
 import AdminDashboard from '../pages/admin/Dashboard'
+import Users from '../pages/admin/Users';
 import Managers from '../pages/admin/Managers'
 import Drivers from '../pages/admin/Driver'
 import Vehicles from '../pages/admin/vehicles'
@@ -13,6 +14,10 @@ const AdminRoutes = [
       <Route key = 'admin-dashboard' path='/admin/dashboard' element={
         <ProtectedRoute allowedRoles={['Admin']}>
           <AdminDashboard />
+        </ProtectedRoute>
+      } />,  <Route key = 'admin-users' path='/admin/users' element={
+        <ProtectedRoute allowedRoles={['Admin']}>
+          <Users/>
         </ProtectedRoute>
       } />,
       <Route key = 'admin-managers' path='/admin/managers' element={

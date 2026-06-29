@@ -79,6 +79,10 @@ exports.getTrip = async (req, res) => {
         if(req.user.userType === 'Manager'){
             query.createdBy = req.user.userId
         }
+        if(req.user.userType === 'Driver'){
+            const driverProfile = await Driver.findOne({userID: req.user.userId})
+            if(driverProfile){query.driver = driverProfile._id}
+        }
         const trip = await Trip.find(query)
         .populate('journey','to from')
         .populate('vehicle','licensePlate')

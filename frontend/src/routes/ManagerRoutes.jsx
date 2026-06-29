@@ -5,6 +5,7 @@ import  Vehicles from '../pages/manager/Vehicles'
 import Drivers from '../pages/manager/Drivers'
 import Journey from '../pages/manager/Journey'
 import Trips from '../pages/manager/Trips'
+import ManagerProifile from '../pages/manager/ManagerProfile'
 
 const ManagerRoutes =  [
   
@@ -33,6 +34,11 @@ const ManagerRoutes =  [
       <Route key='manager-trips' path='/manager/trips' element={
         <ProtectedRoute allowedRoles={['Manager']}>
           <Trips />
+        </ProtectedRoute>
+      } />,
+       <Route key='manager-profile' path='/manager/profile' element={
+        <ProtectedRoute allowedRoles={['Manager']}>
+          <ManagerProifile />
         </ProtectedRoute>
       } />
      
