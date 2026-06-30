@@ -49,7 +49,7 @@ const ManagerLayout = ({ children }) => {
                             <li key={item.to}>
                                 <Link 
                                     to={item.to} 
-                                    className="flex items-center gap-3 p-2 rounded hover:bg-gray-700">
+                                    className="flex items-center gap-3 p-2 rounded hover:bg-red-700">
                                     <span className="text-xl">{item.icon}</span>
                                     {!collapsed && <span>{item.label}</span>}
                                 </Link>

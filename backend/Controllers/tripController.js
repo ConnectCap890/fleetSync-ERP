@@ -87,7 +87,7 @@ exports.getTrip = async (req, res) => {
         .populate('journey','to from')
         .populate('vehicle','licensePlate')
         .populate('driver','name')
-        .populate('createdBy','email userType');
+        
        
 
         res.status(200).json(trip);

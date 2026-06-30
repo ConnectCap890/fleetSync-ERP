@@ -62,25 +62,25 @@ const ManagerDashboard = () => {
         
         {/* Stats Cards */}
         <div className="grid grid-cols-4 gap-6">
-          <div className="bg-white p-6 rounded-lg shadow">
-            <h3 className="text-gray-500 text-sm">Total Vehicles</h3>
-            <p className="text-3xl font-bold text-gray-800">{stats.totalVehicles} <span>🚛</span></p>
+          <div className="group bg-white p-6 rounded-lg shadow hover:bg-red-700 transition-colors duration-300 ">
+            <h3 className="text-gray-500 text-sm group-hover:text-white">Total Vehicles</h3>
+            <p className="text-3xl font-bold text-gray-800 group-hover:text-white ">{stats.totalVehicles} <span>🚛</span></p>
             
           </div>
 
-          <div className="bg-white p-6 rounded-lg shadow">
-            <h3 className="text-gray-500 text-sm">Available Vehicles</h3>
-            <p className="text-3xl font-bold text-gray-800">{stats.vehiclesAvailable} <span>🚛</span></p>
+          <div className="group bg-white p-6 rounded-lg shadow hover:bg-red-700 transition-colors duration-300">
+            <h3 className="text-gray-500 text-sm group-hover:text-white" >Available Vehicles</h3>
+            <p className="text-3xl font-bold text-gray-800 group-hover:text-white ">{stats.vehiclesAvailable} <span>🚛</span></p>
             
           </div>
-          <div className="bg-white p-6 rounded-lg shadow">
-            <h3 className="text-gray-500 text-sm">Active Trips</h3>
-            <p className="text-3xl font-bold text-gray-800">{stats.activeTrips} <span>🗺️</span></p>
+          <div className="group bg-white p-6 rounded-lg shadow hover:bg-red-700 transition-colors duration-300">
+            <h3 className="text-gray-500 text-sm group-hover:text-white">Active Trips</h3>
+            <p className="text-3xl font-bold text-gray-800 group-hover:text-white ">{stats.activeTrips} <span>🗺️</span></p>
             
           </div>
-          <div className="bg-white p-6 rounded-lg shadow">
-            <h3 className="text-gray-500 text-sm">Available Drivers</h3>
-            <p className="text-3xl font-bold text-gray-800">{stats.availableDrivers} <span>🚘</span></p>
+          <div className="group bg-white p-6 rounded-lg shadow hover:bg-red-700 transition-colors duration-300">
+            <h3 className="text-gray-500 text-sm group-hover:text-white">Available Drivers</h3>
+            <p className="text-3xl font-bold text-gray-800 group-hover:text-white ">{stats.availableDrivers} <span>🚘</span></p>
             
           </div>
          
