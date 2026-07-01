@@ -5,7 +5,7 @@ import DriverLayout from './DriverLayout'
 
 const Trips =  () =>{
       const [editId,setEditId] = useState(null)
-      const [editMode,setEditMode] = useState(false)
+      //const [editMode,setEditMode] = useState(false)
       const [showForm,setShowForm] = useState(false)
       const [formData, setFormData] = useState({
         
@@ -24,7 +24,7 @@ const Trips =  () =>{
       const handleEdit = (trips) =>{
 
            setEditId(trips._id)
-           setEditMode(true)
+           //setEditMode(true)
            setShowForm(true)
            setFormData({
 
@@ -50,7 +50,7 @@ const Trips =  () =>{
             )
             alert('Trip Status updated successfully')
             setShowForm(false)
-            setEditMode(false)
+            //setEditMode(false)
             const response = await API.get('/trips')
             setTrips(response.data)
         }catch(error){
@@ -62,16 +62,7 @@ const Trips =  () =>{
 
       
 
-      const resetFrom = () =>{
-      setEditMode(false)
-      setEditId(null)
-      setFormData({
-
-       
-        status:''
-      })
-      setShowForm(!showForm)
-      }
+    
 
       useEffect(() =>{
 

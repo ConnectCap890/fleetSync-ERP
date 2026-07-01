@@ -4,7 +4,7 @@ import AdminLayout from './AdminLayout'
 
 const Users =  () =>{
       const [editId,setEditId] = useState(null)
-      const [editMode,setEditMode] = useState(false)
+      //const [editMode,setEditMode] = useState(false)
       const [showForm,setShowForm] = useState(false)
       
       const [formData, setFormData] = useState({
@@ -24,7 +24,7 @@ const Users =  () =>{
       const handleEdit = (users) =>{
            
            setEditId(users._id)
-           setEditMode(true)
+           //setEditMode(true)
            setShowForm(true)
            setFormData({
 
@@ -52,7 +52,7 @@ const Users =  () =>{
             )
             alert('User updated successfully')
             setShowForm(false)
-            setEditMode(false)
+            //setEditMode(false)
             const response = await API.get('/users')
             setUsers(response.data)
         }catch(error){
