@@ -3,7 +3,7 @@
 A full-stack ERP system built with the MERN stack for managing transport operations including vehicles, drivers, routes and trips across multiple user roles.
 
 ## 🌐 Live Demo
-- **Frontend:** https://fleet-sync-9uf3xr905-connect-cap.vercel.app
+- **Frontend:**    https://fleet-sync-erp.vercel.app/
 - **Backend API:** https://fleetsync-erp-production.up.railway.app
 
 ## 🚀 Features
