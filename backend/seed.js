@@ -13,7 +13,7 @@ const seed = async () =>{
 
     const admin = new User({
         uniqueId : generateID(),
-        email : 'admin@fleetsync.com',
+        email : 'admin1@fleetsync.com',
         password: hashedPassword,
         userType: 'Admin'
 
