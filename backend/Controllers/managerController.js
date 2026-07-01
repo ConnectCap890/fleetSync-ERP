@@ -28,7 +28,7 @@ exports.createManager = async (req, res) => {
 
 exports.getManager_List = async (req, res) => {
     try{
-        const manager = await Manager.find().populate('userID','email userType');
+        const manager = await Manager.find().populate('userID','uniqueId email userType');
         res.status(200).json(manager);
     }
     catch(error){

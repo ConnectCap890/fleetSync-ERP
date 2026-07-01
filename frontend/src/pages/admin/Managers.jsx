@@ -167,6 +167,7 @@ const Managers =  () =>{
                         <th className="p-3 text-left">Phone</th>
                         <th className="p-3 text-left">Department</th>
                         <th className="p-3 text-left">Email</th>
+                        <th className="p-3 text-left">Unique ID</th>
                         <th className="p-3 text-left">Actions</th>
                     </tr>
                 </thead>
@@ -177,6 +178,8 @@ const Managers =  () =>{
                             <td className="p-3">{manager.phone}</td>
                             <td className="p-3">{manager.department}</td>
                             <td className="p-3">{manager.userID?.email}</td>
+                            <td className="p-3">{manager.userID?.uniqueId}</td>
+
                             <td className="p-3">
                                 <button onClick={() => handleEdit(manager)} className="bg-blue-500 text-white px-3 py-1 rounded mr-2">Edit</button>
                                 <button onClick={() => handleDelete(manager._id)} className="bg-red-500 text-white px-3 py-1 rounded">Delete</button>

@@ -180,6 +180,7 @@ const Drivers =  () =>{
                         <th className="p-3 text-left">Name</th>
                         <th className="p-3 text-left">Phone</th>
                         <th className="p-3 text-left">License Number</th>
+                        <th className="p-3 text-left">Unique ID</th>
                         <th className="p-3 text-left">Email</th>
                         <th className="p-3 text-left">Actions</th>
                         <th className="p-3 text-left">Status</th>
@@ -192,6 +193,7 @@ const Drivers =  () =>{
                             <td className="p-3">{drivers.name}</td>
                             <td className="p-3">{drivers.phone}</td>
                             <td className="p-3">{drivers.licenseNumber}</td>
+                            <td className="p-3">{drivers.userID?.uniqueId}</td>
                             <td className="p-3">{drivers.userID?.email}</td>
                             <td className="p-3">
                                 <button onClick={() => handleEdit(drivers)} className="bg-blue-500 text-white px-3 py-1 rounded mr-2">Edit</button>

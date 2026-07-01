@@ -26,7 +26,7 @@ exports.createDriver = async (req,res)=>{
 
 exports.getDriver_List = async (req, res) => {
     try{
-        const driver = await Driver.find().populate('userID','email userType');
+        const driver = await Driver.find().populate('userID','uniqueId email userType');
     
         res.status(200).json(driver);
     } catch (error) {   
