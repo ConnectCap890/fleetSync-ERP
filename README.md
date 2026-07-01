@@ -2,11 +2,17 @@
 
 A full-stack ERP system built with the MERN stack for managing transport operations including vehicles, drivers, routes and trips across multiple user roles.
 
-## 🌐 Live Demo
+##  Live Demo
 - **Frontend:**    https://fleet-sync-erp.vercel.app/
 - **Backend API:** https://fleetsync-erp-production.up.railway.app
+## Credentials for Admin
+   Unique ID= ca6893
+   password = admin123
 
-## 🚀 Features
+   !!! Once logged In as admin create manager and driver and then use its credentials to login to see their accounts and how their accounts function.
+
+
+##  Features
 
 ### Authentication & Security
 - JWT based authentication with 12 hour token expiry
@@ -40,7 +46,7 @@ A full-stack ERP system built with the MERN stack for managing transport operati
 - Trip filtering by role — Manager sees own trips, Driver sees assigned trips
 - Schedule management with date picker
 
-## 🛠️ Tech Stack
+##  Tech Stack
 
 ### Backend
 - Node.js
@@ -58,7 +64,7 @@ A full-stack ERP system built with the MERN stack for managing transport operati
 - Tailwind CSS
 - Context API for global auth state
 
-## 🏗️ Architecture
+##  Architecture
 
 ### Backend — MVC Pattern with Layered Architecture
 
@@ -75,7 +81,7 @@ Routes → Middleware → Controllers → Models → MongoDB
 - Context API for global authentication state
 - Collapsible sidebar navigation per role
 
-## 👥 User Roles
+##  User Roles
 
 | Feature | Admin | Manager | Driver |
 |---|---|---|---|
@@ -88,7 +94,7 @@ Routes → Middleware → Controllers → Models → MongoDB
 | Update Trip Status | ✅ | ✅ | ✅ |
 | View Profile | ✅ | ✅ | ✅ |
 
-## 🚀 Getting Started
+##  Getting Started
 
 ### Prerequisites
 - Node.js
@@ -132,7 +138,7 @@ npm install
 npm start
 ```
 
-## 📡 API Endpoints
+##  API Endpoints
 
 ### Auth
 - `POST /api/auth/register` — Create new user (Admin only)
@@ -176,7 +182,7 @@ npm start
 - `PUT /api/trips/:id` — Update trip status
 - `DELETE /api/trips/:id` — Delete trip (Admin)
 
-## 🔮 Future Improvements
+##  Future Improvements
 - Refresh token implementation for long sessions
 - Race condition protection using MongoDB transactions
 - Email notifications for new user credentials
@@ -188,6 +194,6 @@ npm start
 - Centralized error handling
 - Unit and integration tests
 
-## 👨‍💻 Author
+##  Author
 Hassan — BBIT (final Year), Virtual University of Pakistan
 GitHub: github.com/ConnectCap890
