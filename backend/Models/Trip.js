@@ -15,9 +15,12 @@ const tripSchema = new mongoose.Schema( {
     vehicle: { type: mongoose.Schema.Types.ObjectId, 
         ref: 'Vehicle', 
         required: true },
-    schedule: {
+    startDateTime: {
         type: Date,
         required: true},
+    endDateTime: {
+        type: Date,
+        required: true},    
     status: {
         type: String,
         enum: ['Scheduled', 'In Progress', 'Completed', 'Cancelled'],

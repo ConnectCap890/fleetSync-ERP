@@ -6,18 +6,25 @@ const Vehicle = require('../Models/Vehicle');
 
 exports.createTrip = async (req,res) => {
 
-    const {journey,vehicle,driver,schedule,status} = req.body;
+    const {journey,vehicle,driver,startDateTime,endDateTime,status} = req.body;
     try{
-    
+    //check if startDateTime is before endDateTime
+    if(new Date(endDateTime) <= new Date(startDateTime)) {
+        return res.status(400).json({message: "End date and time must be after start date and time"})
+                                                          }  
         // checks if the vehicle is available
     const vehicleAvalailbility = await Vehicle.findById(vehicle)
       if (!vehicleAvalailbility) return res.status(404).json({message:"vehicle not found"})
+
        const existingVehicleTrip = await Trip.findOne({
         vehicle: vehicle,
-        status: {$in: ['Scheduled','In Progress']}
+        status: {$in: ['Scheduled','In Progress']},
+        $or :[ 
+            {startDateTime:{$lt: new Date(endDateTime)}, endDateTime:{ $gt: new Date(startDateTime)}}
+        ]
     }) 
     if (existingVehicleTrip){
-        return res.status(400).json({message:'Vehicle already Scheduled for another Trip!'})
+        return res.status(400).json({message:`Vehicle is busy from ${existingVehicleTrip.startDateTime.toLocaleString()} to ${existingVehicleTrip.endDateTime.toLocaleString()}`})
     }
     //checks if the driver is available
     const driverAvailability = await Driver.findById(driver)
@@ -25,24 +32,28 @@ exports.createTrip = async (req,res) => {
     if (!driverAvailability)  return res.status(404).json({message: "driver not found"})
     const existDriverTrip = await Trip.findOne({
      driver: driver,
-     status: {$in :['Scheduled','In Progress']}
+     status: {$in :['Scheduled','In Progress']},
+     $or :[
+        {startDateTime:{$lt: new Date(endDateTime)}, endDateTime:{ $gt: new Date(startDateTime)}}
+    ]
     }) 
     
     if (existDriverTrip) 
-        return res.status(400).json({message:'Driver is already Scheduled for another Trip!'})
-
+        return res.status(400).json({message:`Driver is busy from ${existDriverTrip.startDateTime.toLocaleString()} to ${existDriverTrip.endDateTime.toLocaleDateString()}`})
+    
     const newTrip =  new Trip({
 
         journey,
         vehicle,
         driver,
-        schedule,
+        startDateTime,
+        endDateTime,
         status,
         createdBy: req.user.userId
     });  
     await newTrip.save();
-    await Vehicle.findByIdAndUpdate(vehicle,{status:'On Trip'})
-    await Driver.findByIdAndUpdate(driver,{status:'on trip'})
+   // await Vehicle.findByIdAndUpdate(vehicle,{status:'On Trip'})
+    //await Driver.findByIdAndUpdate(driver,{status:'on trip'})
     res.status(201).json(newTrip);
 
 
@@ -99,11 +110,11 @@ exports.getTrip = async (req, res) => {
 exports.updateTrip = async (req,res)=>{
 
      const {id} = req.params;
-     const {journey,vehicle,driver,schedule,status} = req.body;
+     const {journey,vehicle,driver,startDateTime,endDateTime,status} = req.body;
     try{
      //this allows the to only update the fields that are needed  
      const update = {};
-     const allowField = ['journey','vehicle','driver','schedule','status'];
+     const allowField = ['journey','vehicle','driver','startDateTime','endDateTime','status'];
      allowField.forEach(fields =>{
         if(req.body[fields] !== undefined)
           update[fields] = req.body[fields]

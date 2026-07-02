@@ -12,7 +12,8 @@ const Trips =  () =>{
         journey: '',
         driver: '',
         vehicle:'',
-        schedule:'',
+        startDateTime:'',
+        endDateTime:'',
         status:'',
       })
 
@@ -33,7 +34,8 @@ const Trips =  () =>{
            journey : formData.journey,
            driver: formData.driver,
            vehicle: formData.vehicle,
-           schedule: formData.schedule,
+           startDateTime: formData.startDateTime,
+           endDateTime: formData.endDateTime,
            status: formData.status
 
            })
@@ -59,7 +61,8 @@ const Trips =  () =>{
            journey : trips.journey._id,
            driver: trips.driver._id,
            vehicle: trips.vehicle._id,
-           schedule: trips.schedule,
+           startDateTime: trips.startDateTime,
+           endDateTime: trips.endDateTime,
            status : trips.status
 
            })
@@ -76,7 +79,8 @@ const Trips =  () =>{
                   journey : formData.journey,
                   driver: formData.driver,
                   vehicle: formData.vehicle,
-                  schedule: formData.schedule,
+                  startDateTime: formData.startDateTime,
+                  endDateTime: formData.endDateTime,
                   status: formData.status
 
             }
@@ -116,7 +120,8 @@ const Trips =  () =>{
        journey: '',
         driver: '',
         vehicle:'',
-        schedule:'',
+        startDateTime:'',
+        endDateTime:'',
         status:'',
       })
       setShowForm(!showForm)
@@ -175,8 +180,12 @@ const Trips =  () =>{
            <option key={d._id} value={d._id}>{d.name}</option>
     ))}
     </select>
-        <input type="date" name="schedule" onChange={handleChange} className="border p-2 rounded w-full mb-3"/>
-    <select name='status' onChange={handleChange} className="border p-2 rounded w-full mb-3">
+    
+     <label className="block text-gray-600 text-sm mb-1">Start Date & Time</label>
+     <input type="datetime-local" name="startDateTime" onChange={handleChange} className="border p-2 rounded w-full mb-3" />
+
+     <label className="block text-gray-600 text-sm mb-1">End Date & Time</label>
+     <input type="datetime-local" name="endDateTime" onChange={handleChange} className="border p-2 rounded w-full mb-3" />    <select name='status' onChange={handleChange} className="border p-2 rounded w-full mb-3">
        <option value="">Select Status</option>
        <option value="Scheduled">Scheduled</option>
        <option value="In Progress">In Progress</option>
@@ -195,7 +204,8 @@ const Trips =  () =>{
                         <th className="p-3 text-left">Route</th>
                         <th className="p-3 text-left">Vehicle</th>
                         <th className="p-3 text-left">Driver</th>
-                        <th className="p-3 text-left">Schedule</th>
+                        <th className="p-3 text-left">Start Date</th>
+                        <th className="p-3 text-left">End Date</th>
                         <th className="p-3 text-left">Status</th>
                         <th className="p-3 text-left">Actions</th>
                     </tr>
@@ -206,7 +216,8 @@ const Trips =  () =>{
                             <td className="p-3">{trip_s.journey?.from} → {trip_s.journey?.to}</td>
                             <td className="p-3">{trip_s.vehicle?.licensePlate}</td>
                             <td className="p-3">{trip_s.driver?.name}</td>
-                            <td className="p-3">{new Date(trip_s.schedule).toLocaleDateString()}</td>
+                            <td className="p-3">{new Date(trip_s.startDateTime).toLocaleDateString()}</td>
+                            <td className="p-3">{new Date(trip_s.endDateTime).toLocaleDateString()}</td>
                             <td className="p-3">
                                 <button onClick={() => handleEdit(trip_s)} className="bg-blue-500 text-white px-3 py-1 rounded mr-2">Edit</button>
                                 <button onClick={() => handleDelete(trip_s._id)} className="bg-red-500 text-white px-3 py-1 rounded">Delete</button>

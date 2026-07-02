@@ -112,7 +112,8 @@ const Trips =  () =>{
                         <th className="p-3 text-left">Route</th>
                         <th className="p-3 text-left">Vehicle</th>
                         <th className="p-3 text-left">Driver</th>
-                        <th className="p-3 text-left">Schedule</th>
+                        <th className="p-3 text-left">Start Date</th>
+                        <th className="p-3 text-left">End Date</th>
                         <th className="p-3 text-left">Update status</th>
                         <th className="p-3 text-left">Current Status</th>
                     </tr>
@@ -123,7 +124,8 @@ const Trips =  () =>{
                             <td className="p-3">{trip_s.journey?.from} → {trip_s.journey?.to}</td>
                             <td className="p-3">{trip_s.vehicle?.licensePlate}</td>
                             <td className="p-3">{trip_s.driver?.name}</td>
-                            <td className="p-3">{new Date(trip_s.schedule).toLocaleDateString()}</td>
+                            <td className="p-3">{new Date(trip_s.startDateTime).toLocaleDateString()}</td>
+                            <td className="p-3">{new Date(trip_s.endDateTime).toLocaleDateString()}</td>
                             <td className="p-3">
                                 <button onClick={() => handleEdit(trip_s)} className="bg-blue-500 text-white px-3 py-1 rounded mr-2">Edit</button>
                             </td>
