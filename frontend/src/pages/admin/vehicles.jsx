@@ -3,6 +3,7 @@ import API from '../../api/axios'
 import AdminLayout from './AdminLayout'
 import toast from 'react-hot-toast'
 import swal from 'sweetalert2'
+import LoadSpinner from '../../components/loadspinner'
 
 
 const Vehicle =  () =>{
@@ -145,7 +146,7 @@ const Vehicle =  () =>{
       })
       setShowForm(!showForm)
       }
-
+      const [loading,setLoading] = useState(true)
       useEffect(() =>{
 
         const fetchVehicle = async () =>{
@@ -154,11 +155,13 @@ const Vehicle =  () =>{
                 setVehicles(response.data)
             }catch(error){
                 console.log(error)
+            }finally{
+                setLoading(false)
             }
         }
         fetchVehicle()
     },[])
-
+if (loading) <LoadSpinner Layout='admin'/>
     return(
         <AdminLayout>
         <div className="p-8">
