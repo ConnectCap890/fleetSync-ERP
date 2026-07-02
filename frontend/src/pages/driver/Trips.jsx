@@ -1,6 +1,7 @@
 import {useState,useEffect} from 'react'
 import API from '../../api/axios'
 import DriverLayout from './DriverLayout'
+import LoadSpinner from '../../components/loadspinner'
 
 
 const Trips =  () =>{
@@ -62,7 +63,7 @@ const Trips =  () =>{
 
       
 
-    
+    const [loading,setLoading] = useState(true)
 
       useEffect(() =>{
 
@@ -75,10 +76,14 @@ const Trips =  () =>{
        
             }catch(error){
                 console.log(error)
+            }finally{
+                setLoading(false)
             }
         }
         fetchTrip()
     },[])
+
+if (loading) return <LoadSpinner layout='driver'/>
 
     return(
         <DriverLayout>

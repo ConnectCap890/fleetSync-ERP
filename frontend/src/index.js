@@ -11,7 +11,7 @@ root.render(
   <React.StrictMode>
   <AuthProvider>
     <App />
-    <Toaster position="top-right"/>
+    <Toaster position="top-center"/>
     </AuthProvider>
   </React.StrictMode>
 );

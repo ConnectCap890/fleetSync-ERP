@@ -4,6 +4,7 @@ import API from "../../api/axios"
 //import {useAuth} from "../../context/AuthContext"
 //import { Link } from "react-router-dom"
 import ManagerLayout from "./ManagerLayout"
+import LoadSpinner from '../../components/loadspinner'
 
 
 const ManagerDashboard = () => {
@@ -13,7 +14,8 @@ const ManagerDashboard = () => {
     availableDrivers: 0,
    
   })
-
+  
+  const [loading,setLoading] = useState(true)
   useEffect(() => {
     const fetchStats = async () => {
       try {
@@ -34,6 +36,8 @@ const ManagerDashboard = () => {
         })
       } catch (error) {
         console.log(error)
+      }finally {
+        setLoading(false)
       }
     }
 
@@ -49,6 +53,7 @@ const ManagerDashboard = () => {
   //  }     
       
 
+  if (loading) return <LoadSpinner layout='manager'/>
 
   return (
     <ManagerLayout>

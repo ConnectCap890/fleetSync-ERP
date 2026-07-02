@@ -1,6 +1,8 @@
 import {useState,useEffect} from 'react'
 import API from '../../api/axios'
 import ManagerLayout from './ManagerLayout'
+import toast from 'react-hot-toast'
+import LoadSpinner from '../../components/loadspinner'
 
 const ManagerProifile = () =>{
 
@@ -19,6 +21,8 @@ const ManagerProifile = () =>{
                 setLoading(false)
             }catch(error){
                 console.log(error)
+            }finally{
+                setLoading(false)
             }
         }
        fetchProfile()
@@ -30,7 +34,7 @@ const ManagerProifile = () =>{
     const handlePasswordSubmit = async (e) =>{
        e.preventDefault()
        if(passwordData.password !== passwordData.confirmPassword){
-        alert('Passwords do not match')
+        toast.error('Passwords do not match')
        return 
     }
     
@@ -38,15 +42,15 @@ const ManagerProifile = () =>{
         await API.put(`/users/${profile.userID._id}`,{
             password: passwordData.password
         })
-        alert('Password Updated Successfully')
+        toast.success('Password Updated Successfully')
         setPasswordData({password:'',confirmPassword:''})
     }catch(error){
      console.log(error)
-     alert('Error updating password')
+     toast.error('Error updating password')
     }
 }
 
-    if (loading) return <ManagerLayout><div className="p-8">Loading...</div></ManagerLayout>
+    if (loading) return <LoadSpinner layout='manager'/>
     return (
         <ManagerLayout>
             <div className="p-8">

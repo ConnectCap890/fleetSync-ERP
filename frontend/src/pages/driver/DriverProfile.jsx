@@ -1,6 +1,7 @@
 import {useState,useEffect} from 'react'
 import API from '../../api/axios'
 import DriverLayout from './DriverLayout'
+import LoadSpinner from '../../components/loadspinner'
 
 const DriverProfile = () =>{
 
@@ -19,6 +20,8 @@ const DriverProfile = () =>{
                 setLoading(false)
             }catch(error){
                 console.log(error)
+            }finally{
+                setLoading(false)
             }
         }
        fetchProfile()
@@ -46,7 +49,7 @@ const DriverProfile = () =>{
     }
 }
 
-    if (loading) return <DriverLayout><div className="p-8">Loading...</div></DriverLayout>
+ if (loading) return <LoadSpinner layout='driver'/>
     return (
         <DriverLayout>
             <div className="p-8">

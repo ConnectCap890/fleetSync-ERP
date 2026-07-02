@@ -3,6 +3,7 @@ import API from '../../api/axios'
 import ManagerLayout from './ManagerLayout'
 import toast from 'react-hot-toast'
 import swal from 'sweetalert2'
+import LoadSpinner from '../../components/loadspinner'
 
 
 const Trips =  () =>{
@@ -147,7 +148,8 @@ const Trips =  () =>{
       })
       setShowForm(!showForm)
       }
-
+     
+      const [loading,setLoading] = useState(true)
       useEffect(() =>{
 
         const fetchTrip = async () =>{
@@ -165,11 +167,13 @@ const Trips =  () =>{
             setDrivers(driversRes.data)
             }catch(error){
                 console.log(error)
+            }finally{
+                setLoading(false)
             }
         }
         fetchTrip()
     },[])
-
+if (loading) return <LoadSpinner layout='manager'/>
     return(
         <ManagerLayout>
         <div className="p-8">

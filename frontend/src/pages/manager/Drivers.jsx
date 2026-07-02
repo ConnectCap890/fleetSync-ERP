@@ -1,18 +1,13 @@
 import {useState,useEffect} from 'react'
 import API from '../../api/axios'
 import ManagerLayout from './ManagerLayout'
-
+import LoadSpinner from '../../components/loadspinner'
 const Drivers =  () =>{
-      
-      
-      
-      
-
       
       const [drivers,setDrivers] = useState([])
 
       
-
+    const [loading,setLoading] = useState(true)
       useEffect(() =>{
 
         const fetchDriver = async () =>{
@@ -21,10 +16,14 @@ const Drivers =  () =>{
                 setDrivers(response.data)
             }catch(error){
                 console.log(error)
+            }finally{
+                setLoading(false)
             }
         }
         fetchDriver()
     },[])
+            if (loading) return <LoadSpinner layout='manager'/>
+
 
     return(
         <ManagerLayout>

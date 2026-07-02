@@ -1,6 +1,7 @@
 import {useState,useEffect} from 'react'
 import API from '../../api/axios'
 import ManagerLayout from './ManagerLayout'
+import LoadSpinner from '../../components/loadspinner'
 
 const Journey =  () =>{
       
@@ -10,7 +11,7 @@ const Journey =  () =>{
       const [journey,setJourney] = useState([])
 
       
-
+const [ loading,setLoading] = useState(true) 
       useEffect(() =>{
 
         const fetchJourneys = async () =>{
@@ -19,10 +20,13 @@ const Journey =  () =>{
                 setJourney(response.data)
             }catch(error){
                 console.log(error)
+            }finally{
+                setLoading(false)
             }
         }
         fetchJourneys()
     },[])
+    if (loading) return <LoadSpinner layout='manager'/>
 
     return(
         <ManagerLayout>

@@ -3,6 +3,7 @@ import API from '../../api/axios'
 import AdminLayout from './AdminLayout'
 import toast from 'react-hot-toast'
 import swal from 'sweetalert2'
+import LoadSpinner from '../../components/loadspinner'
 
 const Users =  () =>{
       const [editId,setEditId] = useState(null)
@@ -97,7 +98,7 @@ const Users =  () =>{
       }
 
       
-
+      const [loading,setLoading] = useState(true)
       useEffect(() =>{
 
         const fetchUser = async () =>{
@@ -106,10 +107,13 @@ const Users =  () =>{
                 setUsers(response.data)
             }catch(error){
                 console.log(error)
+            }finally{
+                setLoading(false)
             }
         }
         fetchUser()
     },[])
+    if (loading) return <LoadSpinner layout='admin'/>
 
     return(
         <AdminLayout>

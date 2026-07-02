@@ -24,22 +24,32 @@ const Login = () =>{
          
  
         e.preventDefault()
-        try{
-            
-            const response = await API.post('/auth/login',formData)
-            const {token,userType} = response.data
-            login ({userType},token)
-            if(userType === 'Admin') navigate('/admin/dashboard')
-            else if(userType === 'Manager') navigate('/manager/dashboard')
-            else if (userType === 'Driver') navigate('/driver/dashboard')    
+        let toastId;
+        try {
+               const toastId = toast.loading("Logging in...");
 
-        }
-        catch(error){
-            console.log(error)
-            toast.error('Invalid Credentials')
-            
-        }
+               const response = await API.post("/auth/login", formData);
+
+               const { token, userType } = response.data;
+
+               toast.dismiss(toastId);
+               toast.success("Login successful!");
+
+               login({ userType }, token);
+
+               if (userType === "Admin") navigate("/admin/dashboard");
+               else if (userType === "Manager") navigate("/manager/dashboard");
+               else if (userType === "Driver") navigate("/driver/dashboard");
+
+           } 
+            catch (error) {
+            console.log(error);
+
+             toast.dismiss(toastId);
+             toast.error("Invalid Credentials");
+            }
     }
+
 
 return(
     <div className="min-h-screen bg-gray-100 flex items-center justify-center">

@@ -3,6 +3,7 @@ import API from '../../api/axios'
 import AdminLayout from './AdminLayout'
 import toast from 'react-hot-toast'
 import swal from 'sweetalert2'
+import Loadspinner from '../../components/loadspinner'
 
 const Drivers =  () =>{
       const [editOriginalStatus,setEditOriginalStatus] = useState('')
@@ -153,6 +154,8 @@ const Drivers =  () =>{
       setShowForm(!showForm)
       }
 
+      const [loading,setLoading] = useState(true)
+
       useEffect(() =>{
 
         const fetchDriver = async () =>{
@@ -162,9 +165,13 @@ const Drivers =  () =>{
             }catch(error){
                 console.log(error)
             }
+            finally{
+                 setLoading(false)
+            }
         }
         fetchDriver()
     },[])
+    if (loading) return <Loadspinner layout='admin'/>
 
     return(
         <AdminLayout>

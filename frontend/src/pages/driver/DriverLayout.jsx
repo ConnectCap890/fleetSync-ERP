@@ -1,15 +1,25 @@
 import { useState } from 'react'
-import { Link, useNavigate } from 'react-router-dom'
+import { Link, useNavigate,useLocation } from 'react-router-dom'
 import { useAuth } from '../../context/AuthContext'
+import toast from 'react-hot-toast'
 
 const DriverLayout = ({ children }) => {
     const { logout } = useAuth()
     const navigate = useNavigate()
+    const location = useLocation()
+    
     const [collapsed, setCollapsed] = useState(false)
 
     const handleLogout = () => {
+      const toastId = toast.loading("Logging out...",{position:"top-center"});
+
+
+        setTimeout(()=>{
         logout()
+        toast.dismiss(toastId);
         navigate('/login')
+        },1000)
+        
     }
 
     const navItems = [
@@ -44,10 +54,14 @@ const DriverLayout = ({ children }) => {
                         {navItems.map(item => (
                             <li key={item.to}>
                                 <Link 
-                                    to={item.to} 
-                                    className="flex items-center gap-3 p-2 rounded hover:bg-green-700">
+                                   to={item.to}
+                                   className={`flex items-center gap-3 p-2 rounded ${
+                                   location.pathname === item.to 
+                                    ? 'bg-green-700 text-white' 
+                                    : 'hover:bg-green-700'
+                                       }`}>
                                     <span className="text-xl">{item.icon}</span>
-                                    {!collapsed && <span>{item.label}</span>}
+                                     {!collapsed && <span>{item.label}</span>}
                                 </Link>
                             </li>
                         ))}

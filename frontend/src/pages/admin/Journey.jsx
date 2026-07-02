@@ -1,6 +1,7 @@
 import {useState,useEffect} from 'react'
 import API from '../../api/axios'
 import AdminLayout from './AdminLayout'
+import Loadspinner from '../../components/loadspinner'
 import toast from 'react-hot-toast'
 import swal from 'sweetalert2'
 
@@ -141,7 +142,7 @@ const Journey =  () =>{
       })
       setShowForm(!showForm)
       }
-
+   const [loading,setLoading] = useState(true)
       useEffect(() =>{
 
         const fetchJourneys = async () =>{
@@ -151,10 +152,13 @@ const Journey =  () =>{
             }catch(error){
                 console.log(error)
                 toast.error('Error Fetching the Routes')
+            }finally{
+                setLoading(false)
             }
         }
         fetchJourneys()
     },[])
+    if (loading) return <Loadspinner layout='admin'/>
 
     return(
         <AdminLayout>

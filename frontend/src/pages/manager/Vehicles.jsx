@@ -1,12 +1,13 @@
 import {useState,useEffect} from 'react'
 import API from '../../api/axios'
 import ManagerLayout from './ManagerLayout'
+import LoadSpinner from '../../components/loadspinner'
 
 const Vehicles =  () =>{
       
       
       const [vehicles,setVehicles] = useState([])
-
+      const[loading,setLoading] = useState(true)
       useEffect(() =>{
 
         const fetchVehicle = async () =>{
@@ -15,10 +16,13 @@ const Vehicles =  () =>{
                 setVehicles(response.data)
             }catch(error){
                 console.log(error)
+            }finally{
+                setLoading(false)
             }
         }
         fetchVehicle()
     },[])
+    if (loading) return <LoadSpinner layout='manager'/>
 
     return(
         <ManagerLayout>

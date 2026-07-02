@@ -3,11 +3,13 @@ import API from '../../api/axios'
 import AdminLayout from './AdminLayout'
 import toast from 'react-hot-toast'
 import swal from 'sweetalert2'
+import Loadspinner from '../../components/loadspinner'
 
 const Managers =  () =>{
       const [editId,setEditId] = useState(null)
       const [editMode,setEditMode] = useState(false)
       const [showForm,setShowForm] = useState(false)
+
       const [formData, setFormData] = useState({
         uniqueId: '',
         email:'',
@@ -143,6 +145,7 @@ const Managers =  () =>{
       })
       setShowForm(!showForm)
       }
+      const [loading,setLoading] = useState(true)
 
       useEffect(() =>{
 
@@ -152,13 +155,17 @@ const Managers =  () =>{
                 setManagers(response.data)
             }catch(error){
                 console.log(error)
+            }finally{
+                setLoading(false)
             }
         }
         fetchManager()
     },[])
 
-    return(
+if (loading) return <Loadspinner layout='admin'/>
+ return(
         <AdminLayout>
+        
         <div className="p-8">
             <h2 className="text-2xl font-bold mb-6">Managers</h2>
 
@@ -209,6 +216,7 @@ const Managers =  () =>{
                 </tbody>
             </table>
         </div>
+        
         </AdminLayout>
     )
 }

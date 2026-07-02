@@ -4,6 +4,7 @@ import API from "../../api/axios"
 //import {useAuth} from "../../context/AuthContext"
 //import { Link } from "react-router-dom"
 import DriverLayout from './DriverLayout'
+import LoadSpinner from '../../components/loadspinner'
 
 const DriverDashboard = () => {
   const [stats, setStats] = useState({
@@ -17,6 +18,7 @@ const DriverDashboard = () => {
    
   })
 
+  const [loading,setLoading] = useState(true)
   useEffect(() => {
     const fetchStats = async () => {
       try {
@@ -39,6 +41,8 @@ const DriverDashboard = () => {
         })
       } catch (error) {
         console.log(error)
+      }finally{
+        setLoading(false)
       }
     }
 
@@ -53,7 +57,7 @@ const DriverDashboard = () => {
   //   navigate('/login')
   //  }     
       
-
+if (loading) return <LoadSpinner layout='driver'/>
 
   return (
     <DriverLayout>
