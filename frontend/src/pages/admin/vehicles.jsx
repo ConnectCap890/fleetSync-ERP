@@ -161,7 +161,7 @@ const Vehicle =  () =>{
         }
         fetchVehicle()
     },[])
-if (loading) <LoadSpinner Layout='admin'/>
+if (loading) return <LoadSpinner Layout='admin'/>
     return(
         <AdminLayout>
         <div className="p-8">
