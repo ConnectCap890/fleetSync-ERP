@@ -21,7 +21,7 @@ userID: { type: mongoose.Schema.Types.ObjectId,
   },
   status :  {
     type: String,
-    enum:["available","on trip","off duty"],
+    enum:["available","on trip","Off duty"],
     default: "available"
 
   }

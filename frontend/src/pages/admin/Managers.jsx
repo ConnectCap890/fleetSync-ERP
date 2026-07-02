@@ -1,6 +1,8 @@
 import {useState,useEffect} from 'react'
 import API from '../../api/axios'
 import AdminLayout from './AdminLayout'
+import toast from 'react-hot-toast'
+import swal from 'sweetalert2'
 
 const Managers =  () =>{
       const [editId,setEditId] = useState(null)
@@ -40,7 +42,7 @@ const Managers =  () =>{
             department: formData.department
 
            })
-           alert('Manager Created Successfully')
+           toast.success('Manager Created Successfully')
            setShowForm(false)
            const response = await API.get('/managers')
            setManagers(response.data)
@@ -48,7 +50,7 @@ const Managers =  () =>{
 
         }catch(error){
             console.log(error.response?.data)
-            alert('Error Creating Manager')
+            toast.error('Error Creating Manager')
         }
       }
 
@@ -83,33 +85,51 @@ const Managers =  () =>{
             }
 
             )
-            alert('Manager updated successfully')
+            toast.success('Manager updated successfully')
             setShowForm(false)
             setEditMode(false)
             const response = await API.get('/managers')
             setManagers(response.data)
         }catch(error){
             console.log(error)
-            alert('Error Updating the Manager')
+            toast.error('Error Updating the Manager')
         }
     }
 
 
       const handleDelete = async (id) =>{
+         const result = await swal.fire({
+                title: 'Are you sure?',
+                text: 'Are you sure you want to delete this Manager?',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#d33',
+                cancelButtonColor: '#3085d6',
+                confirmButtonText: 'Yes, delete it!',
+                cancelButtonText: 'No',
+                buttonsStyling: false,
+                customClass: {
+                confirmButton: "bg-red-600 text-white px-4 py-2 rounded mr-2",
+                cancelButton: "bg-gray-500 text-white px-4 py-2 rounded",
+                },
+        
+        
+        
+               })
 
-       if(window.confirm('Are you sure want to Delete this manager?')){
+       if(result.isConfirmed){
         try{
             await API.delete(`/managers/${id}`)
             setManagers(managers.filter(manager => manager._id !== id))
         }catch(error){
          console.log(error)
-         alert('Error Deleting the Manager')
+         toast.error('Error Deleting the Manager')
         }
         
        }
       }
 
-      const resetFrom = () =>{
+      const resetForm = () =>{
       setEditMode(false)
       setEditId(null)
       setFormData({
@@ -143,7 +163,7 @@ const Managers =  () =>{
             <h2 className="text-2xl font-bold mb-6">Managers</h2>
 
             <button 
-          onClick={resetFrom}
+          onClick={resetForm}
           className="bg-green-500 text-white px-4 py-2 rounded">
           Add Manager
             </button>

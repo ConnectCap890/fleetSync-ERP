@@ -1,6 +1,8 @@
 import {useState,useEffect} from 'react'
 import API from '../../api/axios'
 import AdminLayout from './AdminLayout'
+import toast from 'react-hot-toast'
+import swal from 'sweetalert2'
 
 
 const Trips =  () =>{
@@ -39,7 +41,7 @@ const Trips =  () =>{
            status: formData.status
 
            })
-           alert('Trip data Created Successfully')
+           toast.success('Trip data Created Successfully')
            setShowForm(false)
            const response = await API.get('/trips')
            setTrips(response.data)
@@ -47,7 +49,7 @@ const Trips =  () =>{
 
         }catch(error){
             console.log(error.response?.data)
-            alert(error.response?.data?.message || 'Error Creating Trip')
+            toast.error(error.response?.data?.message || 'Error Creating Trip')
         }
       }
 
@@ -86,27 +88,46 @@ const Trips =  () =>{
             }
 
             )
-            alert('Trip data updated successfully')
+            toast.success('Trip data updated successfully')
             setShowForm(false)
             setEditMode(false)
             const response = await API.get('/trips')
             setTrips(response.data)
         }catch(error){
             console.log(error)
-            alert('Error Updating the Trips')
+            toast.error('Error Updating the Trips')
         }
     }
 
 
       const handleDelete = async (id) =>{
 
-       if(window.confirm('Are you sure want to Delete this Trip Data?')){
+       const result = await swal.fire({
+        title: 'Are you sure?',
+        text: 'Are you sure you want to delete this trip?',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#d33',
+        cancelButtonColor: '#3085d6',
+        confirmButtonText: 'Yes, delete it!',
+        cancelButtonText: 'No',
+        buttonsStyling: false,
+        customClass: {
+        confirmButton: "bg-red-600 text-white px-4 py-2 rounded mr-2",
+        cancelButton: "bg-gray-500 text-white px-4 py-2 rounded",
+        },
+
+
+
+       })
+
+       if(result.isConfirmed){
         try{
             await API.delete(`/trips/${id}`)
             setTrips(trips.filter(trips => trips._id !== id))
         }catch(error){
          console.log(error)
-         alert('Error Deleting the Trip data')
+         toast.error('Error Deleting the Trip data')
         }
         
        }

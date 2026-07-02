@@ -2,6 +2,7 @@ import { useState } from "react";
 import API from "../api/axios";
 import { useAuth} from "../context/AuthContext";
 import { useNavigate } from "react-router-dom"; 
+import toast from 'react-hot-toast'
 
 const Login = () =>{
     const {login} = useAuth()
@@ -35,7 +36,7 @@ const Login = () =>{
         }
         catch(error){
             console.log(error)
-            alert('Invalid Credentials')
+            toast.error('Invalid Credentials')
             
         }
     }

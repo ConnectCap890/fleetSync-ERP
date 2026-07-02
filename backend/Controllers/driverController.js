@@ -47,7 +47,7 @@ exports.getDriverById = async (req, res) => {
 
 exports.updateDriver = async (req, res) => {
     const {id} = req.params;
-    const {name,phone,licenseNumber} = req.body;
+    const {name,phone,licenseNumber,status} = req.body;
     try{
         const driver = await Driver.findById(id);
         // Check if driver is the same as the logged in user
@@ -61,6 +61,7 @@ exports.updateDriver = async (req, res) => {
         if (req.user.userType === 'Admin' || (req.user.userType === 'Manager')) {
             driver.licenseNumber = licenseNumber;
         }
+        driver.status = status;
         
         
         await driver.save();

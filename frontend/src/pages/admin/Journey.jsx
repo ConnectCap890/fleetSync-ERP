@@ -1,6 +1,8 @@
 import {useState,useEffect} from 'react'
 import API from '../../api/axios'
 import AdminLayout from './AdminLayout'
+import toast from 'react-hot-toast'
+import swal from 'sweetalert2'
 
 const Journey =  () =>{
       
@@ -34,7 +36,7 @@ const Journey =  () =>{
            description: formData.description
 
            })
-           alert('New Route Created Successfully')
+           toast.success('New Route Created Successfully')
            setShowForm(false)
            const response = await API.get('/journeys')
            setJourney(response.data)
@@ -42,7 +44,7 @@ const Journey =  () =>{
 
         }catch(error){
             console.log(error.response?.data)
-            alert('Error Creating New Route')
+            toast.error('Error Creating New Route')
         }
       }
 
@@ -82,27 +84,45 @@ const Journey =  () =>{
             }
 
             )
-            alert('Route data updated successfully')
+            toast.success('Route data updated successfully')
             setShowForm(false)
             setEditMode(false)
             const response = await API.get('/journeys')
             setJourney(response.data)
         }catch(error){
             console.log(error)
-            alert('Error Updating the Route')
+            toast.error('Error Updating the Route')
         }
     }
 
 
       const handleDelete = async (id) =>{
+         const result = await swal.fire({
+                title: 'Are you sure?',
+                text: 'Are you sure you want to delete this route?',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#d33',
+                cancelButtonColor: '#3085d6',
+                confirmButtonText: 'Yes, delete it!',
+                cancelButtonText: 'No',
+                buttonsStyling: false,
+                customClass: {
+                confirmButton: "bg-red-600 text-white px-4 py-2 rounded mr-2",
+                cancelButton: "bg-gray-500 text-white px-4 py-2 rounded",
+                },
+        
+        
+        
+               })
 
-       if(window.confirm('Are you sure want to Delete this Route?')){
+       if(result.isConfirmed){
         try{
             await API.delete(`/journeys/${id}`)
             setJourney(journey.filter(journeys => journeys._id !== id))
         }catch(error){
          console.log(error)
-         alert('Error Deleting the Route')
+         toast.error('Error Deleting the Route')
         }
         
        }
@@ -130,6 +150,7 @@ const Journey =  () =>{
                 setJourney(response.data)
             }catch(error){
                 console.log(error)
+                toast.error('Error Fetching the Routes')
             }
         }
         fetchJourneys()

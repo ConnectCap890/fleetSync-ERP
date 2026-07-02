@@ -1,6 +1,9 @@
 import {useState,useEffect} from 'react'
 import API from '../../api/axios'
 import AdminLayout from './AdminLayout'
+import toast from 'react-hot-toast'
+import swal from 'sweetalert2'
+
 
 const Vehicle =  () =>{
       const [editOriginalStatus,setEditOriginalStatus] = useState('')
@@ -34,7 +37,7 @@ const Vehicle =  () =>{
             status: formData.status
 
            })
-           alert('Vehicle Created Successfully')
+          toast.success('Vehicle Created Successfully')
            setShowForm(false)
            const response = await API.get('/vehicles')
            setVehicles(response.data)
@@ -42,7 +45,7 @@ const Vehicle =  () =>{
 
         }catch(error){
             console.log(error.response?.data)
-            alert('Error Creating Driver')
+            toast.error('Error Creating Vehicle')
         }
       }
 
@@ -71,8 +74,8 @@ const Vehicle =  () =>{
       {
         e.preventDefault()
         if (formData.status !== editOriginalStatus){
-            const confirm = window.confirm('Vehicle status automatically changes when a trip is completed or cancelled. Only change manually in case of emergencies. Are you sure you want to continue?'
-            )
+            const confirm = toast('Vehicle status automatically changes when a trip is completed or cancelled. Only change manually in case of emergencies. Are you sure you want to continue?'
+         ,{icon:'⚠️'});
             if(!confirm) return 
         }
         try{
@@ -91,20 +94,38 @@ const Vehicle =  () =>{
             setVehicles(response.data)
         }catch(error){
             console.log(error)
-            alert('Error Updating the Vehicle')
+            toast.error('Error Updating the Vehicle')
         }
     }
 
 
       const handleDelete = async (id) =>{
 
-       if(window.confirm('Are you sure want to Delete this driver?')){
+         const result = await swal.fire({
+                title: 'Are you sure?',
+                text: 'Are you sure you want to delete this vehicle?',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#d33',
+                cancelButtonColor: '#3085d6',
+                confirmButtonText: 'Yes, delete it!',
+                cancelButtonText: 'No',
+                buttonsStyling: false,
+                customClass: {
+                confirmButton: "bg-red-600 text-white px-4 py-2 rounded mr-2",
+                cancelButton: "bg-gray-500 text-white px-4 py-2 rounded",
+                },
+        
+        
+        
+               })
+       if(result.isConfirmed){
         try{
             await API.delete(`/vehicles/${id}`)
             setVehicles(vehicles.filter(vehicles => vehicles._id !== id))
         }catch(error){
          console.log(error)
-         alert('Error Deleting the vehicle')
+         toast.error('Error Deleting the vehicle')
         }
         
        }
