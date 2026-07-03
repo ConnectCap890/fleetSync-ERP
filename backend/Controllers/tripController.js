@@ -1,12 +1,12 @@
 const Trip = require('../Models/Trip');
-const Journey = require('../Models/Journey');
 const Driver = require('../Models/Driver');
 const Vehicle = require('../Models/Vehicle');
+const Cities = require('../Models/Cities');
 
 
 exports.createTrip = async (req,res) => {
 
-    const {journey,vehicle,driver,startDateTime,endDateTime,status} = req.body;
+    const {departureCity,arrivalCity,vehicle,driver,startDateTime,endDateTime,status} = req.body;
     try{
     //check if startDateTime is before endDateTime
     if(new Date(endDateTime) <= new Date(startDateTime)) {
@@ -40,10 +40,13 @@ exports.createTrip = async (req,res) => {
     
     if (existDriverTrip) 
         return res.status(400).json({message:`Driver is busy from ${existDriverTrip.startDateTime.toLocaleString()} to ${existDriverTrip.endDateTime.toLocaleDateString()}`})
-    
+    if (departureCity.toString() === arrivalCity.toString()) {
+        return res.status(400).json({message:'Departure City must be differen from Arrival City'})
+    }
     const newTrip =  new Trip({
 
-        journey,
+        departureCity,
+        arrivalCity,
         vehicle,
         driver,
         startDateTime,
@@ -68,7 +71,8 @@ exports.getTripById = async (req,res) => {
     const {id} = req.params;
     try{
         const trip = await Trip.findById(id)
-        .populate('journey','to from')
+        .populate('departureCity', 'cityName')
+        .populate('arrivalCity', 'cityName')
         .populate('vehicle','make model licensePlate')
         .populate('driver','name')
         .populate('createdBy', 'email userType');
@@ -95,9 +99,10 @@ exports.getTrip = async (req, res) => {
             if(driverProfile){query.driver = driverProfile._id}
         }
         const trip = await Trip.find(query)
-        .populate('journey','to from')
         .populate('vehicle','licensePlate')
         .populate('driver','name')
+        .populate('departureCity','cityName')
+        .populate('arrivalCity', 'cityName')
        
 
         res.status(200).json(trip);
@@ -110,11 +115,11 @@ exports.getTrip = async (req, res) => {
 exports.updateTrip = async (req,res)=>{
 
      const {id} = req.params;
-     const {journey,vehicle,driver,startDateTime,endDateTime,status} = req.body;
+     const {departureCity,arrivalCity,driver,startDateTime,endDateTime,status} = req.body;
     try{
      //this allows the to only update the fields that are needed  
      const update = {};
-     const allowField = ['journey','vehicle','driver','startDateTime','endDateTime','status'];
+     const allowField = ['departureCity','arrivalCity','driver','startDateTime','endDateTime','status'];
      allowField.forEach(fields =>{
         if(req.body[fields] !== undefined)
           update[fields] = req.body[fields]

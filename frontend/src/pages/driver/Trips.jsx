@@ -126,7 +126,7 @@ if (loading) return <LoadSpinner layout='driver'/>
                 <tbody>
                     {trips.map(trip_s => (
                         <tr key={trip_s._id} className="border-b">
-                            <td className="p-3">{trip_s.journey?.from} → {trip_s.journey?.to}</td>
+                            <td className="p-3">{trip_s.departureCity?.cityName || trip_s.departureCity?.name} → {trip_s.arrivalCity?.cityName || trip_s.arrivalCity?.name}</td>
                             <td className="p-3">{trip_s.vehicle?.licensePlate}</td>
                             <td className="p-3">{trip_s.driver?.name}</td>
                             <td className="p-3">{new Date(trip_s.startDateTime).toLocaleDateString()}</td>

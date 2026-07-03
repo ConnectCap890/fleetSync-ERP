@@ -25,7 +25,7 @@ const ManagerLayout = ({ children }) => {
         
         { to: '/manager/drivers', label: 'Drivers', icon: '🚘' },
         { to: '/manager/Vehicles', label: 'Vehicles', icon: '🚛' },
-        { to: '/manager/journeys', label: 'Journeys', icon: '🗺️' },
+        { to: '/manager/cities', label: 'Cities', icon: '🏙️' },
         { to: '/manager/trips', label: 'Trips', icon: '📋' },
         { to: '/manager/profile', label: 'My Profile', icon: '👤' }
     ]

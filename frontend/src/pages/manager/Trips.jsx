@@ -12,7 +12,8 @@ const Trips =  () =>{
       const [showForm,setShowForm] = useState(false)
       const [formData, setFormData] = useState({
         
-        journey: '',
+        departureCity: '',
+        arrivalCity: '',
         driver: '',
         vehicle:'',
         startDateTime:'',
@@ -25,7 +26,7 @@ const Trips =  () =>{
       }
       const [vehicles,setVehicles] = useState([])
       const [drivers,setDrivers] = useState([])
-      const [journeys,setJourneys] = useState([])
+      const [cities,setCities] = useState([])
       const [trips,setTrips] = useState([])
 
       const handleSubmit = async (e) =>{
@@ -34,7 +35,8 @@ const Trips =  () =>{
           
 
           await API.post('/trips/create',{
-           journey : formData.journey,
+           departureCity: formData.departureCity,
+           arrivalCity: formData.arrivalCity,
            driver: formData.driver,
            vehicle: formData.vehicle,
            startDateTime: formData.startDateTime,
@@ -61,7 +63,8 @@ const Trips =  () =>{
            setShowForm(true)
            setFormData({
 
-           journey : trips.journey._id,
+           departureCity: trips.departureCity?._id,
+           arrivalCity: trips.arrivalCity?._id,
            driver: trips.driver._id,
            vehicle: trips.vehicle._id,
            startDateTime: trips.startDateTime,
@@ -79,7 +82,8 @@ const Trips =  () =>{
         try{
             await API.put(`/trips/${editId}`,
                {  
-                  journey : formData.journey,
+                  departureCity: formData.departureCity,
+                  arrivalCity: formData.arrivalCity,
                   driver: formData.driver,
                   vehicle: formData.vehicle,
                   startDateTime: formData.startDateTime,
@@ -139,7 +143,8 @@ const Trips =  () =>{
       setEditId(null)
       setFormData({
 
-       journey: '',
+       departureCity: '',
+       arrivalCity: '',
         driver: '',
         vehicle:'',
         startDateTime:'',
@@ -154,15 +159,15 @@ const Trips =  () =>{
 
         const fetchTrip = async () =>{
             try{
-                const [tripsRes,journeysRes,vehiclesRes,driversRes] = await Promise.all([
+                const [tripsRes,citiesRes,vehiclesRes,driversRes] = await Promise.all([
                  API.get('/trips'),
-                 API.get('/journeys'),
+                 API.get('/cities'),
                  API.get('/vehicles'),
                  API.get('/drivers')
 
                 ])
             setTrips(tripsRes.data)
-            setJourneys(journeysRes.data)
+            setCities(citiesRes.data)
             setVehicles(vehiclesRes.data)
             setDrivers(driversRes.data)
             }catch(error){
@@ -187,10 +192,18 @@ if (loading) return <LoadSpinner layout='manager'/>
             {showForm && (
     <div className="bg-white p-6 rounded-lg shadow mb-6">
         <h3 className="text-lg font-bold mb-4">{editMode ? 'Update Trip ':'Create New Trip'}</h3>
-    <select name ="journey" onChange={handleChange} className="border p-2 rounded w-full mb-3">
-        <option value="">Select Route</option>
-            {journeys.map(j =>(<option key={j._id } value={j._id}>{j.from } →{j.to}
-        </option>))}
+    <select name="departureCity" onChange={handleChange} className="border p-2 rounded w-full mb-3">
+        <option value="">Select Departure City</option>
+            {cities.map(c => (
+              <option key={c._id} value={c._id}>{c.cityName}</option>
+            ))}
+    </select>
+
+    <select name="arrivalCity" onChange={handleChange} className="border p-2 rounded w-full mb-3">
+        <option value="">Select Arrival City</option>
+            {cities.map(c => (
+              <option key={c._id} value={c._id}>{c.cityName}</option>
+            ))}
     </select>
 
     <select name="vehicle" onChange={handleChange} className="border p-2 rounded w-full mb-3">
@@ -210,7 +223,9 @@ if (loading) return <LoadSpinner layout='manager'/>
      <input type="datetime-local" name="startDateTime" onChange={handleChange} className="border p-2 rounded w-full mb-3" />
 
      <label className="block text-gray-600 text-sm mb-1">End Date & Time</label>
-     <input type="datetime-local" name="endDateTime" onChange={handleChange} className="border p-2 rounded w-full mb-3" />    <select name='status' onChange={handleChange} className="border p-2 rounded w-full mb-3">
+     <input type="datetime-local" name="endDateTime" onChange={handleChange} className="border p-2 rounded w-full mb-3" />
+
+    <select name='status' onChange={handleChange} className="border p-2 rounded w-full mb-3">
        <option value="">Select Status</option>
        <option value="Scheduled">Scheduled</option>
        <option value="In Progress">In Progress</option>
@@ -238,15 +253,11 @@ if (loading) return <LoadSpinner layout='manager'/>
                 <tbody>
                     {trips.map(trip_s => (
                         <tr key={trip_s._id} className="border-b">
-                            <td className="p-3">{trip_s.journey?.from} → {trip_s.journey?.to}</td>
+                            <td className="p-3">{trip_s.departureCity?.cityName || trip_s.departureCity?.name} → {trip_s.arrivalCity?.cityName || trip_s.arrivalCity?.name}</td>
                             <td className="p-3">{trip_s.vehicle?.licensePlate}</td>
                             <td className="p-3">{trip_s.driver?.name}</td>
                             <td className="p-3">{new Date(trip_s.startDateTime).toLocaleDateString()}</td>
                             <td className="p-3">{new Date(trip_s.endDateTime).toLocaleDateString()}</td>
-                            <td className="p-3">
-                                <button onClick={() => handleEdit(trip_s)} className="bg-blue-500 text-white px-3 py-1 rounded mr-2">Edit</button>
-                                <button onClick={() => handleDelete(trip_s._id)} className="bg-red-500 text-white px-3 py-1 rounded">Delete</button>
-                            </td>
                             <td className="p-3">
                              <span className={`px-2 py-1 rounded text-sm ${
                                  trip_s.status === 'In Progress' ? 'bg-blue-100 text-green-800' :
@@ -259,6 +270,10 @@ if (loading) return <LoadSpinner layout='manager'/>
                                  {trip_s.status}
                                </span>
 
+                            </td>
+                            <td className="p-3">
+                                <button onClick={() => handleEdit(trip_s)} className="bg-blue-500 text-white px-3 py-1 rounded mr-2">Edit</button>
+                                <button onClick={() => handleDelete(trip_s._id)} className="bg-red-500 text-white px-3 py-1 rounded">Delete</button>
                             </td>
                         </tr>
                     ))}

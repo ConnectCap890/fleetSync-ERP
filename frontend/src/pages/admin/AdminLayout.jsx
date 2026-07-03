@@ -28,7 +28,7 @@ const AdminLayout = ({ children }) => {
         { to: '/admin/managers', label: 'Managers', icon: '👥' },
         { to: '/admin/drivers', label: 'Drivers', icon: '🚘' },
         { to: '/admin/vehicles', label: 'Vehicles', icon: '🚛' },
-        { to: '/admin/journeys', label: 'Journeys', icon: '🗺️' },
+        { to: '/admin/cities', label: 'Cities', icon: '🏙️' },
         { to: '/admin/trips', label: 'Trips', icon: '📋' },
     ]
 

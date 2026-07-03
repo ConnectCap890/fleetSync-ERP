@@ -1,4 +1,4 @@
-const mongoose = require( 'mongoose' )
+const mongoose = require( 'mongoose' );
 const tripSchema = new mongoose.Schema( {
 
     createdBy: {
@@ -6,9 +6,18 @@ const tripSchema = new mongoose.Schema( {
               ref : 'User',
               required: true
     },
-    journey: { type: mongoose.Schema.Types.ObjectId, 
-        ref: 'Journey', 
-        required: true },
+     departureCity :{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'City',
+        required: true
+
+     },
+     arrivalCity :{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'City',
+        required: true
+
+     },
     driver: { type: mongoose.Schema.Types.ObjectId, 
         ref: 'Driver', 
         required: true },

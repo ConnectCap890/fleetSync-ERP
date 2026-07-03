@@ -3,7 +3,7 @@ import ProtectedRoute from '../components/ProtectedRoute'
 import ManagerDashboard from '../pages/manager/Dashboard'
 import  Vehicles from '../pages/manager/Vehicles'
 import Drivers from '../pages/manager/Drivers'
-import Journey from '../pages/manager/Journey'
+import Cities from '../pages/manager/Cities'
 import Trips from '../pages/manager/Trips'
 import ManagerProifile from '../pages/manager/ManagerProfile'
 
@@ -26,9 +26,9 @@ const ManagerRoutes =  [
           <Drivers />
         </ProtectedRoute>
       } />,
-       <Route key='manager-journey' path='/manager/journeys' element={
+       <Route key='manager-cities' path='/manager/cities' element={
         <ProtectedRoute allowedRoles={['Manager']}>
-          <Journey />
+          <Cities />
         </ProtectedRoute>
       } />,
       <Route key='manager-trips' path='/manager/trips' element={
