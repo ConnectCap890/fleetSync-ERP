@@ -209,13 +209,13 @@ const Trips =  () =>{
 
     <select name="vehicle" onChange={handleChange} className="border p-2 rounded w-full mb-3">
        <option value="">Select Vehicle</option>
-             {vehicles.filter(v => v.status === 'Active').map(v => (
+             {vehicles.filter(v => v.status === 'Active' || v.status === 'On Trip').map(v => (
         <option key={v._id} value={v._id}>{v.make} {v.model} - {v.licensePlate}</option>
          ))}
     </select>
     <select  name="driver" onChange={handleChange} className="border p-2 rounded w-full mb-3">
            <option value="">Select Driver</option>
-              {drivers.filter(d => d.status === 'available').map(d => (
+              {drivers.filter(d => d.status === 'available' || d.status === 'on trip').map(d => (
            <option key={d._id} value={d._id}>{d.name}</option>
     ))}
     </select>

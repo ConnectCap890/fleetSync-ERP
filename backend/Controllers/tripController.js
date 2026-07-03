@@ -1,7 +1,7 @@
 const Trip = require('../Models/Trip');
 const Driver = require('../Models/Driver');
 const Vehicle = require('../Models/Vehicle');
-const Cities = require('../Models/Cities');
+
 
 
 exports.createTrip = async (req,res) => {
@@ -12,6 +12,8 @@ exports.createTrip = async (req,res) => {
     if(new Date(endDateTime) <= new Date(startDateTime)) {
         return res.status(400).json({message: "End date and time must be after start date and time"})
                                                           }  
+    if (!departureCity || !arrivalCity) return res.status(400).json({ message: 'Departure city and arrival city are required' });
+    if (String(departureCity?._id ?? departureCity) === String(arrivalCity?._id ?? arrivalCity)) return res.status(400).json({ message: 'Departure City must be different from Arrival City' });
         // checks if the vehicle is available
     const vehicleAvalailbility = await Vehicle.findById(vehicle)
       if (!vehicleAvalailbility) return res.status(404).json({message:"vehicle not found"})
@@ -40,9 +42,6 @@ exports.createTrip = async (req,res) => {
     
     if (existDriverTrip) 
         return res.status(400).json({message:`Driver is busy from ${existDriverTrip.startDateTime.toLocaleString()} to ${existDriverTrip.endDateTime.toLocaleDateString()}`})
-    if (departureCity.toString() === arrivalCity.toString()) {
-        return res.status(400).json({message:'Departure City must be differen from Arrival City'})
-    }
     const newTrip =  new Trip({
 
         departureCity,
@@ -130,7 +129,11 @@ exports.updateTrip = async (req,res)=>{
         return res.status(403).json({message:"Driver can only update the status"})
      }
     }
-    //this updates the status of drivers and Vehicle automatically if the trip is cancelled or completed to available 
+    if (departureCity.toString() === arrivalCity.toString()){
+        return res.status(400).json({message:"Departure and Arrival city must be different...use common scense if its not accidental error"})
+        alert('Departure and Arrival Cities can not be same!!!')  
+    }
+    //this updates the status of drivers and Vehicle automatically if the trip is cancelled or complete(d to available 
      const trip = await Trip.findById(id)
      if(!trip) return res.status(404).json({message: "trip not found"})
      if(status === "In Progress") {
@@ -143,6 +146,7 @@ exports.updateTrip = async (req,res)=>{
         await Vehicle.findByIdAndUpdate(trip.vehicle, {status: 'Active'})
         await Driver.findByIdAndUpdate(trip.driver, {status: 'available'})  
         }
+
      const updateTrip = await Trip.findByIdAndUpdate(id,update,{new: true});
     res.status(200).json(updateTrip);
 
