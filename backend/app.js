@@ -6,7 +6,7 @@ const managerRoutes = require('./Routes/managerRoutes');
 const driverRoutes = require('./Routes/driverRoutes');
 const vehicleRoutes = require('./Routes/vehicleRoutes');
 const tripRoutes = require('./Routes/tripRoute')
-const citiesRoutes = require('../backend/Routes/citiesRoutes')
+const citiesRoutes = require('./Routes/citiesRoutes')
 const cors = require('cors')
 
 // Middleware
