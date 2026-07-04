@@ -108,7 +108,10 @@ const Trips =  () =>{
            vehicle: trips.vehicle._id,
            startDateTime: trips.startDateTime,
            endDateTime: trips.endDateTime,
-           status : trips.status
+           status : trips.status,
+            routeCoordinates: trips.routeCoordinates,
+            distance: trips.distance,
+           duration: trips.duration
 
            })
          
@@ -127,7 +130,10 @@ const Trips =  () =>{
                   vehicle: formData.vehicle,
                   startDateTime: formData.startDateTime,
                   endDateTime: formData.endDateTime,
-                  status: formData.status
+                  status: formData.status,
+                   routeCoordinates: formData.routeCoordinates,
+                  distance: formData.distance,
+                   duration: formData.duration
 
             }
 

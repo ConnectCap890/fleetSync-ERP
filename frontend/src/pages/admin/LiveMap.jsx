@@ -42,6 +42,11 @@ const LiveMap = () => {
       }
     };
     fetchActiveTrips();
+    
+    // Map refreshes every 30 seconds
+    const interval = setInterval(fetchActiveTrips,30000)
+    // gets cleanup on un mount
+    return () => clearInterval(interval)
   }, []);
 
   const handleShowDetails = async (tripId) => {

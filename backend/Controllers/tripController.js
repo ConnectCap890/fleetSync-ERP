@@ -181,15 +181,32 @@ exports.getTrip = async (req, res) => {
 exports.updateTrip = async (req,res)=>{
 
      const {id} = req.params;
-     const {departureCity,arrivalCity,driver,startDateTime,endDateTime,status} = req.body;
+     const {departureCity,arrivalCity,driver,startDateTime,endDateTime,status,routeCoordinates,distance,duration} = req.body;
     try{
      //this allows the to only update the fields that are needed  
      const update = {};
-     const allowField = ['departureCity','arrivalCity','driver','startDateTime','endDateTime','status'];
+     const allowField = ['departureCity','arrivalCity','driver','startDateTime','endDateTime','status','routeCoordinates','distance','duration'];
      allowField.forEach(fields =>{
         if(req.body[fields] !== undefined)
           update[fields] = req.body[fields]
-     }) 
+     })
+     if (departureCity || arrivalCity) {
+            const trip = await Trip.findById(id)
+            const depId = departureCity || trip.departureCity
+            const arrId = arrivalCity || trip.arrivalCity
+
+            const depCity = await City.findById(depId)
+            const arrCity = await City.findById(arrId)
+
+            if (depCity && arrCity) {
+                const route = await getRoute(depCity, arrCity)
+                if (route) {
+                    update.routeCoordinates = route.coordinates
+                    update.distance = route.distanceKm
+                    update.duration = route.durationHours
+                }
+            }
+        } 
      //check if the userType is Driver then only status can be updated
      if( req.user.userType=== 'Driver'){
      if (Object.keys(update).some(key => key !=='status')) {
