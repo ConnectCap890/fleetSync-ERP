@@ -30,6 +30,7 @@ const AdminLayout = ({ children }) => {
         { to: '/admin/vehicles', label: 'Vehicles', icon: '🚛' },
         { to: '/admin/cities', label: 'Cities', icon: '🏙️' },
         { to: '/admin/trips', label: 'Trips', icon: '📋' },
+        { to: '/admin/map', label: 'Live Map', icon: '🗺️' },
     ]
 
     return (

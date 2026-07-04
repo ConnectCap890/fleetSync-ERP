@@ -8,9 +8,11 @@
     "@testing-library/react": "^16.3.2",
     "@testing-library/user-event": "^13.5.0",
     "axios": "^1.18.1",
+    "leaflet": "^1.9.4",
     "react": "^19.2.7",
     "react-dom": "^19.2.7",
     "react-hot-toast": "^2.6.0",
+    "react-leaflet": "^5.0.0",
     "react-router-dom": "^6.8.0",
     "react-scripts": "5.0.1",
     "sweetalert2": "^11.26.25",
@@ -26,7 +28,9 @@
     "extends": [
       "react-app",
       "react-app/jest"
-    ]
+    ],"rules": {
+        "react-hooks/exhaustive-deps": "off"
+    }
   },
   "browserslist": {
     "production": [

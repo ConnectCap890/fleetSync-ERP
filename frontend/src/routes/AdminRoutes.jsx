@@ -7,6 +7,7 @@ import Drivers from '../pages/admin/Driver'
 import Vehicles from '../pages/admin/vehicles'
 import Cities from '../pages/admin/Cities'
 import Trips from '../pages/admin/Trips'
+import LiveMap from '../pages/admin/LiveMap';
 
 const AdminRoutes = [
   
@@ -49,6 +50,13 @@ const AdminRoutes = [
       <Route key = 'admin-trips' path='/admin/trips' element={
         <ProtectedRoute allowedRoles={['Admin']}>
           <Trips />
+          
+        </ProtectedRoute>
+        
+      } />,
+      <Route key = 'admin-liveMap' path='/admin/map' element={
+        <ProtectedRoute allowedRoles={['Admin']}>
+          <LiveMap />
           
         </ProtectedRoute>
         

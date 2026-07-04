@@ -34,6 +34,17 @@ const tripSchema = new mongoose.Schema( {
         type: String,
         enum: ['Scheduled', 'In Progress', 'Completed', 'Cancelled'],
         default: 'Scheduled'
+    },
+    routeCoordinates:{
+        type: [[Number]],
+        default: []
+        
+    },
+    distance:{
+        type: String
+    },
+    duration:{
+        type:String
     }                 
 
 });

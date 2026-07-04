@@ -4,6 +4,8 @@ import AdminLayout from './AdminLayout'
 import toast from 'react-hot-toast'
 import swal from 'sweetalert2'
 import LoadSpinner from '../../components/loadspinner'
+import { getRoute } from '../../utils/osrm'
+
 
 
 const Trips =  () =>{
@@ -19,6 +21,7 @@ const Trips =  () =>{
         startDateTime:'',
         endDateTime:'',
         status:'',
+        
       })
 
       const handleChange = (e)=>{
@@ -28,6 +31,42 @@ const Trips =  () =>{
       const [drivers,setDrivers] = useState([])
       const [cities,setCities] = useState([])
       const [trips,setTrips] = useState([])
+        
+      
+    useEffect(() => {
+    const { departureCity, arrivalCity, startDateTime } = formData;
+
+    // Only proceed if all three fields are filled
+    if (!departureCity || !arrivalCity || !startDateTime) return;
+
+    const dep = cities.find(c => c._id === departureCity);
+    const arr = cities.find(c => c._id === arrivalCity);
+    if(!dep || !arr ) return
+
+    const fetchRoute = async () => {
+        const route = await getRoute(dep,arr)
+        if(!route) return
+
+        const start = new Date(startDateTime)
+        const durationMs = route.durationHours * 60 * 60 * 1000
+        const end = new Date(start.getTime() + durationMs)
+        const endStr = new Date(end.getTime() - end.getTimezoneOffset()* 60000)
+        .toISOString()
+        .slice(0,16)
+
+        setFormData(prev => ({
+            ...prev,
+            endDateTime:endStr,
+            distance: `${route.distanceKm}km`,
+            duration: `${route.durationHours}hours`,
+            routeCoordinates: route.coordinates
+        }))
+
+    }
+    fetchRoute()
+  
+      }, [formData.departureCity, formData.arrivalCity, formData.startDateTime, cities]);
+  
 
       const handleSubmit = async (e) =>{
         e.preventDefault()
@@ -41,7 +80,10 @@ const Trips =  () =>{
            vehicle: formData.vehicle,
            startDateTime: formData.startDateTime,
            endDateTime: formData.endDateTime,
-           status: formData.status
+           status: formData.status,
+           routeCoordinates: formData.routeCoordinates,
+           distance: formData.distance,
+           duration: formData.duration
 
            })
            toast.success('Trip data Created Successfully')
@@ -221,10 +263,10 @@ const Trips =  () =>{
     </select>
      
       <label className="block text-gray-600 text-sm mb-1">Start Date & Time</label>
-      <input type="datetime-local" name="startDateTime" onChange={handleChange} className="border p-2 rounded w-full mb-3" />
+      <input type="datetime-local" name="startDateTime" value= {formData.startDateTime} onChange={handleChange} className="border p-2 rounded w-full mb-3" />
 
-      <label className="block text-gray-600 text-sm mb-1">End Date & Time</label>
-      <input type="datetime-local" name="endDateTime" onChange={handleChange} className="border p-2 rounded w-full mb-3" />
+      <label className="block text-gray-600 text-sm mb-1">Estimated Arrival</label>
+      <input type="datetime-local" name="endDateTime" value={formData.endDateTime} onChange={handleChange} className="border p-2 rounded w-full mb-3" />
 
 
     <select name='status' onChange={handleChange} className="border p-2 rounded w-full mb-3">

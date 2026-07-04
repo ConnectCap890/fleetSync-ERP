@@ -6,7 +6,7 @@ const Vehicle = require('../Models/Vehicle');
 
 exports.createTrip = async (req,res) => {
 
-    const {departureCity,arrivalCity,vehicle,driver,startDateTime,endDateTime,status} = req.body;
+    const {departureCity,arrivalCity,vehicle,driver,startDateTime,endDateTime,status,routeCoordinates,distance,duration} = req.body;
     try{
     //check if startDateTime is before endDateTime
     if(new Date(endDateTime) <= new Date(startDateTime)) {
@@ -51,6 +51,9 @@ exports.createTrip = async (req,res) => {
         startDateTime,
         endDateTime,
         status,
+        routeCoordinates,
+        distance,
+        duration,
         createdBy: req.user.userId
     });  
     await newTrip.save();
@@ -172,5 +175,45 @@ exports.deleteTrip = async (req, res) => {
         console.log(error);
         res.status(500).json({ message: 'Server error' });
     }
+};
+
+exports.getActiveTripsForMap = async (req, res) => {
+  try {
+    const trips = await Trip.find({ status: { $in: [ 'In Progress'] } })
+      .populate('departureCity', 'cityName cordinates')
+      .populate('arrivalCity', 'cityName cordinates')
+      .populate('vehicle', 'make model licensePlate')
+      .populate('driver', 'name phone')
+      .populate('createdBy', 'email userType');
+
+    const formatted = trips.map(trip => ({
+            _id: trip._id,
+            status: trip.status,
+            startDateTime: trip.startDateTime,
+            endDateTime: trip.endDateTime,
+            routeCoordinates: trip.routeCoordinates,
+            distance: trip.distance,
+            duration: trip.duration,
+            departure: {
+                cityName: trip.departureCity?.cityName,
+                lat: trip.departureCity?.cordinates?.lat,
+                lng: trip.departureCity?.cordinates?.lng
+            },
+            arrival: {
+                cityName: trip.arrivalCity?.cityName,
+                lat: trip.arrivalCity?.cordinates?.lat,
+                lng: trip.arrivalCity?.cordinates?.lng
+            },
+            driver: trip.driver,
+            vehicle: trip.vehicle,
+            createdBy: trip.createdBy
+        }))
+
+    res.status(200).json(formatted);
+    //console.log(formatted)
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Server error' });
+  }
 };
 

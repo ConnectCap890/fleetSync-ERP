@@ -33,9 +33,8 @@ exports.getCities = async(req,res) =>{
 exports.deleteCity = async (req,res) =>{
         const {id} = req.params;
         try{
-            const city = await Cities.findById(id);
+            const city = await Cities.findByIdAndDelete(id);
             if(!city)return res.status(404).json({message: 'City not found'});
-            await city.remove();
             res.status(200).json({message: 'City deleted successfully'})
         }catch(error){
             console.log(error);
