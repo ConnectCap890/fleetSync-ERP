@@ -1,72 +1,136 @@
 const Trip = require('../Models/Trip');
 const Driver = require('../Models/Driver');
 const Vehicle = require('../Models/Vehicle');
+const City = require('../Models/Cities')
+const {getRoute} = require('../Utils/osrm')
 
 
 
-exports.createTrip = async (req,res) => {
+exports.createTrip = async (req, res) => {
+  const {
+    departureCity,
+    arrivalCity,
+    vehicle,
+    driver,
+    startDateTime,
+    endDateTime,
+    status,
+  } = req.body;
 
-    const {departureCity,arrivalCity,vehicle,driver,startDateTime,endDateTime,status,routeCoordinates,distance,duration} = req.body;
-    try{
-    //check if startDateTime is before endDateTime
-    if(new Date(endDateTime) <= new Date(startDateTime)) {
-        return res.status(400).json({message: "End date and time must be after start date and time"})
-                                                          }  
-    if (!departureCity || !arrivalCity) return res.status(400).json({ message: 'Departure city and arrival city are required' });
-    if (String(departureCity?._id ?? departureCity) === String(arrivalCity?._id ?? arrivalCity)) return res.status(400).json({ message: 'Departure City must be different from Arrival City' });
-        // checks if the vehicle is available
-    const vehicleAvalailbility = await Vehicle.findById(vehicle)
-      if (!vehicleAvalailbility) return res.status(404).json({message:"vehicle not found"})
-
-       const existingVehicleTrip = await Trip.findOne({
-        vehicle: vehicle,
-        status: {$in: ['Scheduled','In Progress']},
-        $or :[ 
-            {startDateTime:{$lt: new Date(endDateTime)}, endDateTime:{ $gt: new Date(startDateTime)}}
-        ]
-    }) 
-    if (existingVehicleTrip){
-        return res.status(400).json({message:`Vehicle is busy from ${existingVehicleTrip.startDateTime.toLocaleString()} to ${existingVehicleTrip.endDateTime.toLocaleString()}`})
+  try {
+    // Validate dates
+    if (new Date(endDateTime) <= new Date(startDateTime)) {
+      return res.status(400).json({
+        message: "End date and time must be after start date and time",
+      });
     }
-    //checks if the driver is available
-    const driverAvailability = await Driver.findById(driver)
-    
-    if (!driverAvailability)  return res.status(404).json({message: "driver not found"})
-    const existDriverTrip = await Trip.findOne({
-     driver: driver,
-     status: {$in :['Scheduled','In Progress']},
-     $or :[
-        {startDateTime:{$lt: new Date(endDateTime)}, endDateTime:{ $gt: new Date(startDateTime)}}
-    ]
-    }) 
-    
-    if (existDriverTrip) 
-        return res.status(400).json({message:`Driver is busy from ${existDriverTrip.startDateTime.toLocaleString()} to ${existDriverTrip.endDateTime.toLocaleDateString()}`})
-    const newTrip =  new Trip({
 
-        departureCity,
-        arrivalCity,
-        vehicle,
-        driver,
-        startDateTime,
-        endDateTime,
-        status,
-        routeCoordinates,
-        distance,
-        duration,
-        createdBy: req.user.userId
-    });  
+    // Validate cities
+    if (!departureCity || !arrivalCity) {
+      return res.status(400).json({
+        message: "Departure city and arrival city are required",
+      });
+    }
+
+    if (String(departureCity) === String(arrivalCity)) {
+      return res.status(400).json({
+        message: "Departure City must be different from Arrival City",
+      });
+    }
+
+    // Get city documents
+    const depCity = await City.findById(departureCity);
+    const arrCity = await City.findById(arrivalCity);
+
+    if (!depCity || !arrCity) {
+      return res.status(404).json({
+        message: "City not found",
+      });
+    }
+
+    // Vehicle availability
+    const vehicleAvailability = await Vehicle.findById(vehicle);
+
+    if (!vehicleAvailability) {
+      return res.status(404).json({
+        message: "Vehicle not found",
+      });
+    }
+
+    const existingVehicleTrip = await Trip.findOne({
+      vehicle,
+      status: { $in: ["Scheduled", "In Progress"] },
+      startDateTime: { $lt: new Date(endDateTime) },
+      endDateTime: { $gt: new Date(startDateTime) },
+    });
+
+    if (existingVehicleTrip) {
+      return res.status(400).json({
+        message: `Vehicle is busy from ${existingVehicleTrip.startDateTime.toLocaleString()} to ${existingVehicleTrip.endDateTime.toLocaleString()}`,
+      });
+    }
+
+    // Driver availability
+    const driverAvailability = await Driver.findById(driver);
+
+    if (!driverAvailability) {
+      return res.status(404).json({
+        message: "Driver not found",
+      });
+    }
+
+    const existingDriverTrip = await Trip.findOne({
+      driver,
+      status: { $in: ["Scheduled", "In Progress"] },
+      startDateTime: { $lt: new Date(endDateTime) },
+      endDateTime: { $gt: new Date(startDateTime) },
+    });
+
+    if (existingDriverTrip) {
+      return res.status(400).json({
+        message: `Driver is busy from ${existingDriverTrip.startDateTime.toLocaleString()} to ${existingDriverTrip.endDateTime.toLocaleString()}`,
+      });
+    }
+
+    // Get route from OSRM
+    const route = await getRoute(depCity, arrCity);
+
+    if (!route) {
+      return res.status(500).json({
+        message: "Unable to calculate route",
+      });
+    }
+
+    // Create trip
+    const newTrip = new Trip({
+      departureCity,
+      arrivalCity,
+      vehicle,
+      driver,
+      startDateTime,
+      endDateTime,
+      status,
+
+      routeCoordinates: route.coordinates,
+      distance: route.distanceKm,
+      duration: route.durationHours,
+
+      createdBy: req.user.userId,
+    });
+
     await newTrip.save();
-   // await Vehicle.findByIdAndUpdate(vehicle,{status:'On Trip'})
-    //await Driver.findByIdAndUpdate(driver,{status:'on trip'})
+
+    // Optional
+    // await Vehicle.findByIdAndUpdate(vehicle, { status: "On Trip" });
+    // await Driver.findByIdAndUpdate(driver, { status: "on trip" });
+
     res.status(201).json(newTrip);
-
-
-    }
-    catch(error){
-        console.log(error);
-        res.status(500).json({message: "server Error"})
-    }
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({
+      message: "Server Error",
+    });
+  }
 };
 
 exports.getTripById = async (req,res) => {
@@ -217,3 +281,26 @@ exports.getActiveTripsForMap = async (req, res) => {
   }
 };
 
+exports.calculateRoute = async (req, res) => {
+    const { departureCity, arrivalCity } = req.body
+    try {
+        const depCity = await City.findById(departureCity)
+        const arrCity = await City.findById(arrivalCity)
+        
+        if (!depCity || !arrCity) {
+            return res.status(404).json({ message: 'City not found' })
+        }
+
+        const route = await getRoute(depCity, arrCity)
+        if (!route) {
+            return res.status(500).json({ message: 'Could not calculate route' })
+        }
+
+        res.status(200).json({
+            distanceKm: route.distanceKm,
+            durationHours: route.durationHours
+        })
+    } catch (error) {
+        res.status(500).json({ message: error.message })
+    }
+}

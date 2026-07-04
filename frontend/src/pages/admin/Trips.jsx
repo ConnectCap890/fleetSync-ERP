@@ -4,7 +4,6 @@ import AdminLayout from './AdminLayout'
 import toast from 'react-hot-toast'
 import swal from 'sweetalert2'
 import LoadSpinner from '../../components/loadspinner'
-import { getRoute } from '../../utils/osrm'
 
 
 
@@ -34,38 +33,36 @@ const Trips =  () =>{
         
       
     useEffect(() => {
-    const { departureCity, arrivalCity, startDateTime } = formData;
-
-    // Only proceed if all three fields are filled
-    if (!departureCity || !arrivalCity || !startDateTime) return;
-
-    const dep = cities.find(c => c._id === departureCity);
-    const arr = cities.find(c => c._id === arrivalCity);
-    if(!dep || !arr ) return
+    const { departureCity, arrivalCity, startDateTime } = formData
+    if (!departureCity || !arrivalCity || !startDateTime) return
 
     const fetchRoute = async () => {
-        const route = await getRoute(dep,arr)
-        if(!route) return
+        try {
+            const response = await API.post('/trips/calculate-route', {
+                departureCity,
+                arrivalCity
+            })
+            
+            const { durationHours } = response.data
+            const start = new Date(startDateTime)
+            const durationMs = durationHours * 60 * 60 * 1000
+            const end = new Date(start.getTime() + durationMs)
+            const endStr = new Date(end.getTime() - end.getTimezoneOffset() * 60000)
+                .toISOString()
+                .slice(0, 16)
 
-        const start = new Date(startDateTime)
-        const durationMs = route.durationHours * 60 * 60 * 1000
-        const end = new Date(start.getTime() + durationMs)
-        const endStr = new Date(end.getTime() - end.getTimezoneOffset()* 60000)
-        .toISOString()
-        .slice(0,16)
-
-        setFormData(prev => ({
-            ...prev,
-            endDateTime:endStr,
-            distance: `${route.distanceKm}km`,
-            duration: `${route.durationHours}hours`,
-            routeCoordinates: route.coordinates
-        }))
-
+            setFormData(prev => ({
+                ...prev,
+                endDateTime: endStr
+            }))
+        } catch (error) {
+            console.log('Route calculation error:', error)
+        }
     }
+
     fetchRoute()
-  
-      }, [formData.departureCity, formData.arrivalCity, formData.startDateTime, cities]);
+// eslint-disable-next-line react-hooks/exhaustive-deps
+}, [formData.departureCity, formData.arrivalCity, formData.startDateTime])
   
 
       const handleSubmit = async (e) =>{
