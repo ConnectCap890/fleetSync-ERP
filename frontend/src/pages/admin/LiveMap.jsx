@@ -15,6 +15,18 @@ import {getVehiclePosition} from '../../utils/vehiclePosition'
 //   iconSize: [25, 41],
 //   iconAnchor: [12, 41],
 // })
+const departurIcon = L.divIcon({
+  
+    html: '🏁',
+    iconSize : [30,30],
+    className : 'departure-icon'
+  })
+  const arrivalIcon = L.divIcon({
+
+    html : '📍',
+    iconSize : [30,30],
+    className : 'arrival-Icon'
+  })
 const truckIcon = L.divIcon({
     html: '🚛',
     iconSize: [30, 30],
@@ -48,6 +60,14 @@ const LiveMap = () => {
     // gets cleanup on un mount
     return () => clearInterval(interval)
   }, []);
+
+  const [currentTime,setCurrentTime] = useState(new Date())
+  useEffect(()=>{
+    const timer = setInterval(() => {
+      setCurrentTime(new Date())
+    },1000)
+    return () => clearInterval(timer)
+  })
 
   const handleShowDetails = async (tripId) => {
     try {
@@ -92,7 +112,7 @@ const LiveMap = () => {
                   ? trip.routeCoordinates.map(c => [c[1], c[0]])
                   : [dep, arr]
                 const vehiclePos = trip.routeCoordinates?.length > 0
-                  ? getVehiclePosition(trip)
+                  ? getVehiclePosition(trip,currentTime)
                   : dep
 
               return (
@@ -105,17 +125,17 @@ const LiveMap = () => {
                                       />
 
                                       {/* Departure marker */}
-                                      <Marker position={dep}>
+                                      <Marker position={dep} icon={departurIcon}>
                                           <Popup>{trip.departure.cityName}</Popup>
                                       </Marker>
 
                                       {/* Arrival marker */}
-                                      <Marker position={arr}>
+                                      <Marker position={arr} icon={arrivalIcon}>
                                           <Popup>{trip.arrival.cityName}</Popup>
                                       </Marker>
 
                                       {/* Vehicle marker — only show if In Progress */}
-                                      {trip.status === 'In Progress' && (
+                                      {trip.status === 'In Progress' && vehiclePos && (
                                           <Marker position={vehiclePos} icon={truckIcon}>
                                               <Popup>
                                                   <strong>🚛 {trip.vehicle?.make} {trip.vehicle?.model}</strong><br />

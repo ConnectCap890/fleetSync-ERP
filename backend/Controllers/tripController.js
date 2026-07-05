@@ -190,6 +190,7 @@ exports.updateTrip = async (req,res)=>{
         if(req.body[fields] !== undefined)
           update[fields] = req.body[fields]
      })
+     // on update osrm recalculates the and change the route in case if city of any arr or dep is changed
      if (departureCity || arrivalCity) {
             const trip = await Trip.findById(id)
             const depId = departureCity || trip.departureCity

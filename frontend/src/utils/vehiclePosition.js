@@ -1,5 +1,5 @@
-export const getVehiclePosition = (trip) => {
-    const now = new Date();
+export const getVehiclePosition = (trip, currentTime = new Date()) => {
+    const now = currentTime;
     const start = new Date(trip.startDateTime);
     const end = new Date(trip.endDateTime);
 
@@ -16,7 +16,7 @@ export const getVehiclePosition = (trip) => {
         const coords = trip.routeCoordinates[trip.routeCoordinates.length - 1];
         return [coords[1], coords[0]];
     }
-
+     
     const progress = (now - start) / (end - start);
 
     const index = Math.min(
