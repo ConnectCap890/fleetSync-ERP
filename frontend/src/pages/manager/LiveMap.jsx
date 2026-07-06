@@ -66,7 +66,7 @@ const LiveMap = () => {
       setCurrentTime(new Date())
     },1000)
     return () => clearInterval(timer)
-  })
+  },[])
 
   const handleShowDetails = async (tripId) => {
     try {
