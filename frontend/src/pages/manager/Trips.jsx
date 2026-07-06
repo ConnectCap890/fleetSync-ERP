@@ -257,7 +257,7 @@ if (loading) return <LoadSpinner layout='manager'/>
     </select>
     <select  name="driver" onChange={handleChange} className="border p-2 rounded w-full mb-3">
            <option value="">Select Driver</option>
-              {drivers.filter(d => d.status === 'available' || d.status == 'on rip').map(d => (
+              {drivers.filter(d => d.status === 'available' || d.status === 'on trip').map(d => (
            <option key={d._id} value={d._id}>{d.name}</option>
     ))}
     </select>
