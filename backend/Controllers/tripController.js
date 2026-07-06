@@ -224,6 +224,12 @@ exports.updateTrip = async (req, res) => {
         });
       }
     }
+    //check if the userType is Driver then only status can be updated
+    if (req.user.userType === 'Driver') {
+      if (Object.keys(update).some(key => key !== 'status')) {
+        return res.status(403).json({ message: "Driver can only update the status" })
+      }
+    }
     //this updates the status of drivers and Vehicle automatically if the trip is cancelled or complete(d to available 
     const trip = await Trip.findById(id)
     if (!trip) return res.status(404).json({ message: "trip not found" })
