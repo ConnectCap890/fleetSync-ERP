@@ -31,7 +31,8 @@ const Users =  () =>{
            setShowForm(true)
            setFormData({
 
-         
+            email: users.email,
+            password: '',
            userType: users.userType
 
            })
@@ -39,6 +40,7 @@ const Users =  () =>{
          
 
       }
+      
 
       const handleUpdate = async(e) =>
       {
@@ -47,7 +49,7 @@ const Users =  () =>{
         try{
             await API.put(`/users/${editId}`,
                { 
-                
+                password : formData.password,
                 email : formData.email,
                 userType: formData.userType
             }

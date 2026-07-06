@@ -6,7 +6,7 @@ import Drivers from '../pages/manager/Drivers'
 import Cities from '../pages/manager/Cities'
 import Trips from '../pages/manager/Trips'
 import ManagerProifile from '../pages/manager/ManagerProfile'
-
+import LiveMap from '../pages/manager/LiveMap'
 const ManagerRoutes =  [
   
     
@@ -39,6 +39,11 @@ const ManagerRoutes =  [
        <Route key='manager-profile' path='/manager/profile' element={
         <ProtectedRoute allowedRoles={['Manager']}>
           <ManagerProifile />
+        </ProtectedRoute>
+      } />,
+      <Route key='manager-liveMap' path='/manager/liveMap' element={
+        <ProtectedRoute allowedRoles={['Manager']}>
+          <LiveMap/>
         </ProtectedRoute>
       } />
      

@@ -6,6 +6,7 @@ import swal from 'sweetalert2'
 import LoadSpinner from '../../components/loadspinner'
 
 
+
 const Trips =  () =>{
       const [editId,setEditId] = useState(null)
       const [editMode,setEditMode] = useState(false)
@@ -29,6 +30,38 @@ const Trips =  () =>{
       const [cities,setCities] = useState([])
       const [trips,setTrips] = useState([])
 
+      useEffect(() => {
+    const { departureCity, arrivalCity, startDateTime } = formData
+    if (!departureCity || !arrivalCity || !startDateTime) return
+
+    const fetchRoute = async () => {
+        try {
+            const response = await API.post('/trips/calculate-route', {
+                departureCity,
+                arrivalCity
+            })
+            
+            const { durationHours } = response.data
+            const start = new Date(startDateTime)
+            const durationMs = durationHours * 60 * 60 * 1000
+            const end = new Date(start.getTime() + durationMs)
+            const endStr = new Date(end.getTime() - end.getTimezoneOffset() * 60000)
+                .toISOString()
+                .slice(0, 16)
+
+            setFormData(prev => ({
+                ...prev,
+                endDateTime: endStr
+            }))
+        } catch (error) {
+            console.log('Route calculation error:', error)
+        }
+    }
+
+    fetchRoute()
+// eslint-disable-next-line react-hooks/exhaustive-deps
+}, [formData.departureCity, formData.arrivalCity, formData.startDateTime])
+
       const handleSubmit = async (e) =>{
         e.preventDefault()
         try{
@@ -41,7 +74,11 @@ const Trips =  () =>{
            vehicle: formData.vehicle,
            startDateTime: formData.startDateTime,
            endDateTime: formData.endDateTime,
-           status: formData.status
+           status: formData.status,
+           routeCoordinates: formData.routeCoordinates,
+           distance: formData.distance,
+           duration: formData.duration,
+          
 
            })
            toast.success('Trip data Created Successfully')
@@ -69,7 +106,10 @@ const Trips =  () =>{
            vehicle: trips.vehicle._id,
            startDateTime: trips.startDateTime,
            endDateTime: trips.endDateTime,
-           status : trips.status
+           status : trips.status,
+           routeCoordinates: trips.routeCoordinates,
+           distance: trips.distance,
+           duration: trips.duration
 
            })
          
@@ -88,7 +128,10 @@ const Trips =  () =>{
                   vehicle: formData.vehicle,
                   startDateTime: formData.startDateTime,
                   endDateTime: formData.endDateTime,
-                  status: formData.status
+                  status: formData.status,
+                  routeCoordinates: formData.routeCoordinates,
+                  distance: formData.distance,
+                  duration: formData.duration
 
             }
 
@@ -208,22 +251,22 @@ if (loading) return <LoadSpinner layout='manager'/>
 
     <select name="vehicle" onChange={handleChange} className="border p-2 rounded w-full mb-3">
        <option value="">Select Vehicle</option>
-             {vehicles.filter(v => v.status === 'Active').map(v => (
+             {vehicles.filter(v => v.status === 'Active'|| v.status === 'On Trip').map(v => (
         <option key={v._id} value={v._id}>{v.make} {v.model} - {v.licensePlate}</option>
          ))}
     </select>
     <select  name="driver" onChange={handleChange} className="border p-2 rounded w-full mb-3">
            <option value="">Select Driver</option>
-              {drivers.filter(d => d.status === 'available').map(d => (
+              {drivers.filter(d => d.status === 'available' || d.status == 'on rip').map(d => (
            <option key={d._id} value={d._id}>{d.name}</option>
     ))}
     </select>
     
      <label className="block text-gray-600 text-sm mb-1">Start Date & Time</label>
-     <input type="datetime-local" name="startDateTime" onChange={handleChange} className="border p-2 rounded w-full mb-3" />
+     <input type="datetime-local" value={formData.startDateTime} name="startDateTime" onChange={handleChange} className="border p-2 rounded w-full mb-3" />
 
-     <label className="block text-gray-600 text-sm mb-1">End Date & Time</label>
-     <input type="datetime-local" name="endDateTime" onChange={handleChange} className="border p-2 rounded w-full mb-3" />
+     <label className="block text-gray-600 text-sm mb-1">Estimated Date & Time</label>
+     <input type="datetime-local" value={formData.endDateTime} name="endDateTime" onChange={handleChange} className="border p-2 rounded w-full mb-3" />
 
     <select name='status' onChange={handleChange} className="border p-2 rounded w-full mb-3">
        <option value="">Select Status</option>
@@ -251,13 +294,17 @@ if (loading) return <LoadSpinner layout='manager'/>
                     </tr>
                 </thead>
                 <tbody>
-                    {trips.map(trip_s => (
+               {trips.map(trip_s => (
                         <tr key={trip_s._id} className="border-b">
                             <td className="p-3">{trip_s.departureCity?.cityName || trip_s.departureCity?.name} → {trip_s.arrivalCity?.cityName || trip_s.arrivalCity?.name}</td>
                             <td className="p-3">{trip_s.vehicle?.licensePlate}</td>
                             <td className="p-3">{trip_s.driver?.name}</td>
                             <td className="p-3">{new Date(trip_s.startDateTime).toLocaleDateString()}</td>
                             <td className="p-3">{new Date(trip_s.endDateTime).toLocaleDateString()}</td>
+                            <td className="p-3">
+                                <button onClick={() => handleEdit(trip_s)} className="bg-blue-500 text-white px-3 py-1 rounded mr-2">Edit</button>
+                                <button onClick={() => handleDelete(trip_s._id)} className="bg-red-500 text-white px-3 py-1 rounded">Delete</button>
+                            </td>
                             <td className="p-3">
                              <span className={`px-2 py-1 rounded text-sm ${
                                  trip_s.status === 'In Progress' ? 'bg-blue-100 text-green-800' :
@@ -270,10 +317,6 @@ if (loading) return <LoadSpinner layout='manager'/>
                                  {trip_s.status}
                                </span>
 
-                            </td>
-                            <td className="p-3">
-                                <button onClick={() => handleEdit(trip_s)} className="bg-blue-500 text-white px-3 py-1 rounded mr-2">Edit</button>
-                                <button onClick={() => handleDelete(trip_s._id)} className="bg-red-500 text-white px-3 py-1 rounded">Delete</button>
                             </td>
                         </tr>
                     ))}

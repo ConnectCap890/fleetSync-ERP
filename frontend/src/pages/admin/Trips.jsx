@@ -134,6 +134,7 @@ const Trips =  () =>{
                    routeCoordinates: formData.routeCoordinates,
                   distance: formData.distance,
                    duration: formData.duration
+                   
 
             }
 

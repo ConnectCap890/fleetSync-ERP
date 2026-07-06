@@ -25,7 +25,8 @@ const DriverLayout = ({ children }) => {
     const navItems = [
         { to: '/driver/dashboard', label: 'Dashboard', icon: '📊' },
         { to: '/drivers/trips', label: 'Trips', icon: '📋' },
-        { to: '/drivers/profile', label: 'My Profile', icon: '👤' }
+        { to: '/drivers/profile', label: 'My Profile', icon: '👤' },
+        { to: '/drivers/liveMap', label: 'My Live Trip', icon: '🗺️' },
     ]
 
     return (
